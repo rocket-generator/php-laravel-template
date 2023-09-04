@@ -1,0 +1,10 @@
+{
+    "text": "string",
+    "uuid": "uuid.UUID",
+    "date": "string",
+    "boolean": "bool",
+    "number": "float64",
+    "integer": "int64",
+    "jsonb": "array",
+    "varchar": "string"
+}

@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit\Models;
+
+use App\Models\{{ .Name.Singular.Title }};
+use Tests\TestCase;
+
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class {{ .Name.Singular.Title }}Test extends TestCase
+{
+    protected bool $useDatabase = true;
+
+    /**
+     * Test {{ .Name.Singular.Title }} create.
+     */
+    public function testCreate{{ .Name.Singular.Title }}ModelSuccessfully(): void
+    {
+        $user = new {{ .Name.Singular.Title }}();
+        static::assertNotNull($user);
+    }
+
+    public function testCreateNew{{ .Name.Singular.Title }}AndStoreItSuccessfully(): void
+    {
+        $model = new {{ .Name.Singular.Title }}();
+
+        $data = {{ .Name.Singular.Title }}::factory()->make();
+        foreach ($data->toFillableArray() as $key => $value) {
+            $model->{$key} = $value;
+        }
+        $model->save();
+        static::assertNotNull({{ .Name.Singular.Title }}::find($model->id));
+    }
+}

@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit\Repositories;
+
+use App\Contracts\Repositories\{{ .Name.Singular.Title }}RepositoryInterface;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Tests\TestCase;
+
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class {{ .Name.Singular.Title }}RepositoryTest extends TestCase
+{
+    /**
+     * Test {{ .Name.Singular.Title }}Repository create.
+     *
+     * @throws BindingResolutionException
+     */
+    public function testCreate{{ .Name.Singular.Title }}RepositoryInstanceSuccessfully(): void
+    {
+        $repository = app()->make({{ .Name.Singular.Title }}RepositoryInterface::class);
+        static::assertNotNull($repository);
+    }
+}

@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class {{ .Name.Singular.Title }} extends Base
+{
+    use HasFactory;
+{{- if eq .PrimaryKeyDataType "uuid" }}
+    use HasUuids;
+{{- end }}
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+{{- range .Columns}}
+{{- if ne .Primary }}
+        '{{ .Name.Original }}',
+{{- end }}
+{{- end }}
+    ];
+
+{{- if eq .PrimaryKeyDataType "uuid" }}
+    protected $casts = [
+        'id' => 'string',
+    ];
+{{- end }}
+
+    protected $primaryKey = "id";
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+    ];
+
+}

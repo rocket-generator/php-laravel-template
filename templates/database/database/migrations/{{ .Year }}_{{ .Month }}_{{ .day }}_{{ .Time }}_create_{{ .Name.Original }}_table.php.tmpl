@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('{{ .Name.Original }}', function (Blueprint $table) {
+{{- range .Columns}}
+{{- if .Primary }}
+            $table->{{ .ObjectType }}('{{ .Name.Original }}')->primary();
+{{- else }}
+            $table->{{ .ObjectType }}('{{ .Name.Original }}'){{ if .Nullable }}->nullable(){{ end }}{{ if ne .DefaultValue "" }}->default({{ .DefaultValue }}){{ end }};
+{{- end }}
+{{- end }}
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('{{ .Name.Original }}');
+    }
+};
