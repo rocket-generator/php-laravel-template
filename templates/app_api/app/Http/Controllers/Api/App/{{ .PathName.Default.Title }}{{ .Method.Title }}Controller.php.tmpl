@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Api\App;
+
+use App\Contracts\Services\FacilityServiceInterface;
+use App\Exceptions\Api\App\APIErrorException;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\App\Facility;
+
+class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Controller
+{
+    protected {{ .PathName.Default.Title }}ServiceInterface ${{ .PathName.Default.Camel }}Service;
+
+    public function __construct({{ .PathName.Default.Title }}ServiceInterface ${{ .PathName.Default.Camel }}Service)
+    {
+        $this->{{ .PathName.Default.Camel }}Service = ${{ .PathName.Default.Camel }}Service;
+    }
+
+    /**
+     * @throws APIErrorException
+     */
+    public function exec(string $id): {{ .SuccessResponse.Schema.Name.Default.Title }}
+    {
+        $data = $this->{{ .PathName.Default.Camel }}Service->findById($id);
+        if($data === null) {
+            throw new APIErrorException('Not found', 404);
+        }
+
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($data);
+    }
+}

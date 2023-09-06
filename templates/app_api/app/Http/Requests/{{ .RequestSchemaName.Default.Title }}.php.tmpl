@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Requests\Api\App;
+
+class {{ .RequestSchemaName.Default.Title }} extends Request
+{
+{{- if ne .RequestSchema nil }}
+    protected array $rules = [
+{{- range .RequestSchema.Properties}}
+{{- if eq .Required false }}
+        '{{ .Name.Default.Title }}' => 'required',
+{{- end }}
+{{- end }}
+    ];
+{{- end }}
+}

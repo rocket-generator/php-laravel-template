@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Http\Resources\Api\Status;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -24,7 +26,23 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+            if ($e instanceof \App\Exceptions\Api\APIErrorException) {
+                return false;
+            }
+            return true;
         });
+
+        $this->renderable(function (Throwable $e) {
+            if ($e instanceof \App\Exceptions\Api\APIErrorException) {
+                return $e->getErrorResponse();
+            }
+
+            return Status::error($e->getMessage(), 500);
+        });
+    }
+
+    protected function unauthenticated($request, AuthenticationException $exception): Status
+    {
+        return Status::error('Unauthorized', 401);
     }
 }

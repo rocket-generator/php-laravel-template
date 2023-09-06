@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Api\Admin;
+
+use App\Contracts\Repositories\{{ .Name.Singular.Title }}RepositoryInterface;
+
+class {{ .Name.Plural.Title }}Controller extends ResourceController
+{
+    public function __construct(
+        {{ .Name.Singular.Title }}RepositoryInterface $repository,
+    ) {
+        $this->repository = $repository;
+    }
+}
