@@ -1,0 +1,3 @@
+{{- range .Requests}}
+        $router->get('{{ .Path }}', [{{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class, '{{ .Method.Camel }}']);
+{{- end}}

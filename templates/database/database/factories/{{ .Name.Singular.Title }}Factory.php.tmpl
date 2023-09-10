@@ -20,7 +20,7 @@ class {{ .Name.Singular.Title }}Factory extends Factory
     {
         return [
 {{- range .Columns}}
-{{- if ne .Primary }}
+{{- if not .Primary }}
             '{{ .Name.Original }}' => fake()->{{ .FakerType }},
 {{- end }}
 {{- end }}

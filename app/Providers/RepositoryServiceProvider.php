@@ -13,12 +13,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        /*
-        $this->app->singleton(
-            \App\Contracts\Repositories\UserRepositoryInterface::class,
-            \App\Repositories\UserRepository::class
-        );
-        */
+        /* [REGISTER_REPOSITORIES] */
     }
 
     /**

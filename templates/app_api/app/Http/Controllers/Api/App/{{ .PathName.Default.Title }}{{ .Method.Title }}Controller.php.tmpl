@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\App;
 
-use App\Contracts\Services\FacilityServiceInterface;
+use App\Contracts\Services\{{ .PathName.Default.Title }}ServiceInterface;
 use App\Exceptions\Api\App\APIErrorException;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\App\Facility;
+use App\Http\Requests\Api\App\{{ .RequestSchemaName.Default.Title }};
+use App\Http\Resources\Api\App\{{ .SuccessResponse.Schema.Name.Default.Title }};
 
 class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Controller
 {
@@ -21,9 +22,16 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
     /**
      * @throws APIErrorException
      */
-    public function exec(string $id): {{ .SuccessResponse.Schema.Name.Default.Title }}
+    public function {{ .Method.Camel }}(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+        {{ .ObjectType }} ${{ .Name.Default.Camel }},
+{{- end }}
+{{ end }}
+        {{ .RequestSchemaName.Default.Title }} $request
+    ): {{ .SuccessResponse.Schema.Name.Default.Title }}
     {
-        $data = $this->{{ .PathName.Default.Camel }}Service->findById($id);
+        $data = $this->{{ .PathName.Default.Camel }}Service->exec();
         if($data === null) {
             throw new APIErrorException('Not found', 404);
         }

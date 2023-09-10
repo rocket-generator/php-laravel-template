@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Resources\Api\App;
 
 use App\Http\Resources\Resource;
+{{- if ne .SuccessResponse.RelatedEntity nil }}
+use App\Models\{{ .SuccessResponse.RelatedEntity.Name.Singular.Title }} as {{ .SuccessResponse.RelatedEntity.Name.Singular.Title }}Model;
+{{- else }}
 use App\Models\Base as BaseModel;
+{{- end }}
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 
@@ -15,8 +19,7 @@ class {{ .SuccessResponse.Schema.Name.Default.Title }} extends Resource
 
     protected array $columns = [
 {{- range .SuccessResponse.Schema.Properties}}
-        '{{ .Name.Original }}' => {{if eq .Type "array" }}[]{{ else }}''{{ end}},
-        '',
+        '{{ .Name.Original }}' => {{ if eq .Type "array" }}[]{{ else }}''{{ end }},
 {{- end}}
     ];
 
@@ -25,7 +28,7 @@ class {{ .SuccessResponse.Schema.Name.Default.Title }} extends Resource
      *
      * @param mixed $resource
      */
-    public function __construct(BaseModel $resource)
+    public function __construct({{ if ne .SuccessResponse.RelatedEntity nil }}{{ .SuccessResponse.RelatedEntity.Name.Singular.Title }}Model{{ else }}BaseModel{{ end }} $resource)
     {
         parent::__construct($resource);
     }
@@ -38,9 +41,16 @@ class {{ .SuccessResponse.Schema.Name.Default.Title }} extends Resource
     public function toArray($request): array|\JsonSerializable|Arrayable
     {
         $result = [
+{{- if ne .SuccessResponse.RelatedEntity nil }}
 {{- range .SuccessResponse.Schema.Properties}}
-        '{{ .Name.Original }}' => {{if eq .Type "array" }}[]{{ else }}''{{ end}},
-{{- end}}
+            '{{ .Name.Original }}' => $this->resource->{{ .Name.Original }},
+{{- end }}
+{{- else }}
+{{- range .SuccessResponse.Schema.Properties}}
+            '{{ .Name.Original }}' => {{if eq .Type "array" }}[]{{ else }}''{{ end}},
+{{- end }}
+{{- end }}
+
         ];
         return $result;
     }

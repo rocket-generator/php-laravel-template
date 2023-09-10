@@ -13,12 +13,7 @@ class ServiceServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        /*
-        $this->app->singleton(
-            \App\Contracts\Services\UserServiceInterface::class,
-            \App\Services\UserService::class
-        );
-        */
+        /* [REGISTER_SERVICES] */
     }
 
     /**

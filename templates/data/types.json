@@ -1,10 +1,12 @@
 {
     "text": "string",
-    "uuid": "uuid.UUID",
+    "uuid": "uuid",
     "date": "string",
-    "boolean": "bool",
-    "number": "float64",
-    "integer": "int64",
+    "boolean": "boolean",
+    "number": "float",
+    "integer": "integer",
+    "int": "integer",
+    "bigint": "bigInteger",
     "jsonb": "array",
     "varchar": "string"
 }

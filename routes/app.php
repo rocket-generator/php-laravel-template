@@ -35,5 +35,6 @@ Route::group([
         // $router->put('me', [MeController::class, 'updateMe']);
     });
 
+    /* [APP_ROUTES] */
 
 });
