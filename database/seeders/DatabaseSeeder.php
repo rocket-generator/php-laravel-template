@@ -7,16 +7,27 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    protected array $seeders = [];
+
+    protected array $environments = [
+        'testing' => [],
+        'local' => [AdminUserSeeder::class],
+        'development' => [],
+        'production' => [],
+    ];
+
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($this->seeders as $seeder) {
+            $this->call($seeder);
+        }
+        if (\array_key_exists(app()->environment(), $this->environments)) {
+            foreach ($this->environments[app()->environment()] as $seeder) {
+                $this->call($seeder);
+            }
+        }
     }
 }

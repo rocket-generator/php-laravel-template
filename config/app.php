@@ -160,6 +160,7 @@ return [
          * Package Service Providers...
          */
         Vyuldashev\LaravelOpenApi\OpenApiServiceProvider::class,
+        PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider::class,
         /*
          * Application Service Providers...
          */

@@ -18,20 +18,34 @@ class ResourceController extends BaseController
 
     public function index(Request $request): Resources
     {
-        $offset = (int)$request->query('offset', 0);
-        $limit = (int)$request->query('limit', 20);
-        $filter = $request->query('filter', '');
+        $offset = (int)$request->query('_start', 0);
+        $end = (int)$request->query('_end', 0);
+        $limit = $end - $offset;
+
+        $directionString = $request->query('_order', 'asc');
+        $directions = explode(',', $directionString);
+        $orderString = $request->query('_sort', 'id');
+        $orders = explode(',', $orderString);
+
+        $filter = $request->query('_filter', '');
         $filterArray = [];
         if($filter !== '') {
             $filterArray = ['query' => $filter];
         }
-        $order = strtolower($request->query('order', 'id'));
-        $direction = strtolower($request->query('direction', 'asc'));
-        if ('desc' !== $direction) {
-            $direction = 'asc';
+
+        foreach ($directions as $index => $direction) {
+            if ('desc' !== $direction) {
+                $direction = 'asc';
+            }
+            $directions[$index] = $direction;
         }
 
-        $resources = $this->repository->getByFilter($filterArray, $order, $direction, $offset, $limit);
+        if( count($directions) !== count($orders) ) {
+            $orders = ["id"];
+            $directions = ["asc"];
+        }
+
+        $resources = $this->repository->getByFilter($filterArray, $orders, $directions, $offset, $limit);
         $count = $this->repository->countByFilter($filterArray);
 
         return new Resources([

@@ -7,7 +7,6 @@ namespace App\Repositories;
 use App\Contracts\Repositories\AuthenticatableRepositoryInterface;
 use App\Models\AuthenticatableBase;
 use App\Models\Base;
-use App\Utilities\StringUtility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 

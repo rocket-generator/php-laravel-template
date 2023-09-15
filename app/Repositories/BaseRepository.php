@@ -210,18 +210,30 @@ class BaseRepository implements BaseRepositoryInterface
         return $model->updateOrCreate($attributes, $values);
     }
 
-    protected function setBefore(Base|Builder|EloquentBuilder $query, string $order, string $direction, mixed $before): Base|Builder|EloquentBuilder
+    protected function setBefore(Base|Builder|EloquentBuilder $query, string|array $order, string|array $direction, mixed $before): Base|Builder|EloquentBuilder
     {
         if (0 === $before) {
             return $query;
         }
-
+        if( is_array($order) && is_array($direction) ) {
+            foreach ($order as $index => $column) {
+                $query = $query->where($column, 'desc' === $direction[$index] ? '>' : '<', $before);
+            }
+            return $query;
+        }
         return $query->where($order, 'desc' === $direction ? '>' : '<', $before);
     }
 
-    protected function setAfter(Base|Builder|EloquentBuilder $query, string $order, string $direction, mixed $after): Base|Builder|EloquentBuilder
+    protected function setAfter(Base|Builder|EloquentBuilder $query, string|array $order, string|array $direction, mixed $after): Base|Builder|EloquentBuilder
     {
         if (0 === $after) {
+            return $query;
+        }
+
+        if( is_array($order) && is_array($direction) ) {
+            foreach ($order as $index => $column) {
+                $query = $query->where($column, 'desc' === $direction[$index] ? '<' : '>', $after);
+            }
             return $query;
         }
 
@@ -307,11 +319,19 @@ class BaseRepository implements BaseRepositoryInterface
         return $query;
     }
 
-    protected function buildOrder(Base|Builder|EloquentBuilder $query, array $filter, string $order, string $direction): Base|Builder|EloquentBuilder
+    protected function buildOrder(Base|Builder|EloquentBuilder $query, array $filter, string|array $order, string|array $direction): Base|Builder|EloquentBuilder
     {
         if (!empty($order)) {
-            $direction = empty($direction) ? 'asc' : $direction;
-            $query = $query->orderBy($order, $direction);
+            if(!is_array($order)) {
+                $order = [$order];
+            }
+            if(!is_array($direction)) {
+                $direction = [$direction];
+            }
+            foreach ($order as $index => $orderElement) {
+                $directionElement = empty($direction[$index]) ? 'asc' : $direction[$index];
+                $query = $query->orderBy($orderElement, $directionElement);
+            }
         }
 
         return $query;

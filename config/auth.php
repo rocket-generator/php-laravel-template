@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'admin',
+        'passwords' => 'admin_users',
     ],
 
     /*
@@ -36,10 +36,16 @@ return [
     */
 
     'guards' => [
+        'admin' => [
+            'driver' => 'jwt',
+            'provider' => 'admin_users',
+        ],
+        /*
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        */
     ],
 
     /*
@@ -60,15 +66,16 @@ return [
     */
 
     'providers' => [
+        'admin_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AdminUser::class,
+        ],
+        /*
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        */
     ],
 
     /*
@@ -91,9 +98,9 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
-            'table' => 'password_reset_tokens',
+        'admin_users' => [
+            'provider' => 'admin_users',
+            'table' => 'admin_password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],

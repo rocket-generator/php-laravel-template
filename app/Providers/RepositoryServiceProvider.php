@@ -13,6 +13,11 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(
+            \App\Contracts\Repositories\AdminUserRepositoryInterface::class,
+            \App\Repositories\AdminUserRepository::class
+        );
+
         /* [REGISTER_REPOSITORIES] */
     }
 

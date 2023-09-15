@@ -23,13 +23,16 @@ Route::group([
     Route::group([
         'prefix' => 'auth',
     ], function ($router): void {
-        // $router->post('login', [AuthController::class, 'login']);
-        // $router->post('logout', [AuthController::class, 'logout']);
+        $router->post('login', [AuthController::class, 'login']);
+        $router->post('logout', [AuthController::class, 'logout']);
     });
 
     Route::group([
         'middleware' => ['middleware' => 'auth:admin'],
     ], function ($router): void {
+        Route::get('me', [MeController::class, 'getMe']);
+
+        Route::apiResource('admin_users', \App\Http\Controllers\Api\Admin\AdminUsersController::class);
 
         // Route::apiResource('users', \App\Http\Controllers\Api\Admin\UsersController::class);
 

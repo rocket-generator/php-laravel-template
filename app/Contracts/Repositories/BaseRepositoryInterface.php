@@ -20,39 +20,39 @@ interface BaseRepositoryInterface
     /**
      * Get All Model's query.
      */
-    public function allByFilterQuery(array $filter, string $order = null, string $direction = null): Builder;
+    public function allByFilterQuery(array $filter, string|array $order = null, string|array $direction = null): Builder;
 
     /**
      * Get All Models.
      */
-    public function all(string $order = null, string $direction = null): Collection|iterable;
+    public function all(string|array $order = null, string|array $direction = null): Collection|iterable;
 
     /**
      * Get All Enabled Models.
      */
-    public function allEnabled(string $order = null, string $direction = null): Collection|iterable;
+    public function allEnabled(string|array $order = null, string|array $direction = null): Collection|iterable;
 
     /**
      * Get All Models with filter conditions.
      */
-    public function allByFilter(array $filter, string $order = null, string $direction = null): Collection|iterable;
+    public function allByFilter(array $filter, string|array $order = null, string|array $direction = null): Collection|iterable;
 
     /**
      * Get Models with Order.
      */
-    public function get(string $order, string $direction, int $offset, int $limit, mixed $before = 0, mixed $after = 0): Collection|iterable;
+    public function get(string|array $order, string|array $direction, int $offset, int $limit, mixed $before = 0, mixed $after = 0): Collection|iterable;
 
     /**
      * Get Models with Order.
      */
-    public function getByFilter(array $filter, string $order, string $direction, int $offset, int $limit, mixed $before = 0, mixed $after = 0): Collection|iterable;
+    public function getByFilter(array $filter, string|array $order, string|array $direction, int $offset, int $limit, mixed $before = 0, mixed $after = 0): Collection|iterable;
 
     /**
      * Get Models with Order.
      *
      * @return array|Base[]|Collection|\Illuminate\Support\Collection|\Traversable
      */
-    public function getEnabled(string $order, string $direction, int $offset, int $limit, mixed $before = 0, mixed $after = 0): \Illuminate\Support\Collection|array;
+    public function getEnabled(string|array $order, string|array $direction, int $offset, int $limit, mixed $before = 0, mixed $after = 0): \Illuminate\Support\Collection|array;
 
     public function count(): int;
 
