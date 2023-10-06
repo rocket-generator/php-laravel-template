@@ -20,7 +20,7 @@ class Resources extends BaseResource
      *
      * @param Request $request
      */
-    public function toArray($request): array|\JsonSerializable|Arrayable
+    public function toArray(Request $request): array|\JsonSerializable|Arrayable
     {
         $resources = [];
         foreach ($this->resource['resources'] as $resource) {

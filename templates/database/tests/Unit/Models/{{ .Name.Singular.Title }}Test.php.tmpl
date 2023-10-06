@@ -34,6 +34,6 @@ final class {{ .Name.Singular.Title }}Test extends TestCase
             $model->{$key} = $value;
         }
         $model->save();
-        static::assertNotNull({{ .Name.Singular.Title }}::find($model->id));
+        static::assertNotNull({{ .Name.Singular.Title }}::find($model->{{ .PrimaryKeyName }}));
     }
 }

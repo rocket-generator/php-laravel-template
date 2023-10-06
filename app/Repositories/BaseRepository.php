@@ -215,7 +215,7 @@ class BaseRepository implements BaseRepositoryInterface
         if (0 === $before) {
             return $query;
         }
-        if( is_array($order) && is_array($direction) ) {
+        if(is_array($order) && is_array($direction)) {
             foreach ($order as $index => $column) {
                 $query = $query->where($column, 'desc' === $direction[$index] ? '>' : '<', $before);
             }
@@ -230,7 +230,7 @@ class BaseRepository implements BaseRepositoryInterface
             return $query;
         }
 
-        if( is_array($order) && is_array($direction) ) {
+        if(is_array($order) && is_array($direction)) {
             foreach ($order as $index => $column) {
                 $query = $query->where($column, 'desc' === $direction[$index] ? '<' : '>', $after);
             }

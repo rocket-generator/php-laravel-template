@@ -26,7 +26,7 @@ class Resource extends BaseResource
      *
      * @param Request $request
      */
-    public function toArray($request): array|\JsonSerializable|Arrayable
+    public function toArray(Request $request): array|\JsonSerializable|Arrayable
     {
         return $this->resource->toArray();
     }

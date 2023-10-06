@@ -2,9 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Services\ClientSideException;
+use App\Exceptions\Services\ServerSideException;
 use App\Http\Resources\Api\Status;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -35,6 +38,13 @@ class Handler extends ExceptionHandler
         $this->renderable(function (Throwable $e) {
             if ($e instanceof \App\Exceptions\Api\APIErrorException) {
                 return $e->getErrorResponse();
+            }
+            if ($e instanceof ClientSideException) {
+                return Status::error($e->getMessage(), $e->statusCode, $e->errorCode);
+            }
+            Log::error($e->getTraceAsString());
+            if ($e instanceof ServerSideException) {
+                return Status::error($e->getMessage(), $e->statusCode, $e->errorCode);
             }
 
             return Status::error($e->getMessage(), 500);

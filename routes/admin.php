@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\AuthController;
 use App\Http\Controllers\Api\Admin\MeController;
+/* [ADMIN_CONTROLLER_IMPORT] */
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,8 @@ Route::group([
         Route::get('me', [MeController::class, 'getMe']);
 
         Route::apiResource('admin_users', \App\Http\Controllers\Api\Admin\AdminUsersController::class);
+
+        /* [ADMIN_ROUTES] */
 
         // Route::apiResource('users', \App\Http\Controllers\Api\Admin\UsersController::class);
 

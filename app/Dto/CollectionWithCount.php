@@ -16,4 +16,9 @@ class CollectionWithCount
         $this->collection = $collection;
         $this->count = $count;
     }
+
+    public static function empty(): self
+    {
+        return new self(new Collection(), 0);
+    }
 }

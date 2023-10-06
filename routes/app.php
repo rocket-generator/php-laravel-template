@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\App\AuthController;
-use App\Http\Controllers\Api\App\FacilityController;
-use App\Http\Controllers\Api\App\MeController;
-use App\Http\Controllers\Api\App\SessionController;
+/* [APP_CONTROLLER_IMPORT] */
 use Illuminate\Support\Facades\Route;
 
 /*

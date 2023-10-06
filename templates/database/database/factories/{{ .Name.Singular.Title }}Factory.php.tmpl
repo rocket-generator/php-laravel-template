@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\{{ .Name.Plural.Title }};
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\{{ .Name.Singular.Title }}>
@@ -21,7 +19,9 @@ class {{ .Name.Singular.Title }}Factory extends Factory
         return [
 {{- range .Columns}}
 {{- if not .Primary }}
+{{- if not .IsSystemUseColumn }}
             '{{ .Name.Original }}' => fake()->{{ .FakerType }},
+{{- end }}
 {{- end }}
 {{- end }}
         ];

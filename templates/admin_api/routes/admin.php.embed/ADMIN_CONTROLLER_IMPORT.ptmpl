@@ -1,0 +1,3 @@
+{{- range .Entities}}
+use App\Http\Controllers\Api\Admin\{{ .Name.Plural.Title }}Controller;
+{{- end }}

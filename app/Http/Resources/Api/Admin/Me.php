@@ -33,7 +33,7 @@ class Me extends Resource
      *
      * @param Request $request
      */
-    public function toArray($request): array|\JsonSerializable|Arrayable
+    public function toArray(Request $request): array|\JsonSerializable|Arrayable
     {
         return parent::toArray($request);
     }

@@ -1,6 +1,6 @@
 {{- range .Requests}}
         $this->app->singleton(
-            \App\Contracts\Services\{{ .PathName.Plural.Title }}ServiceInterface::class,
-            \App\Services\{{ .PathName.Plural.Title }}Service::class
+            \App\Contracts\Services\{{ .PathName.Singular.Title }}ServiceInterface::class,
+            \App\Services\{{ .PathName.Singular.Title }}Service::class
         );
 {{- end}}

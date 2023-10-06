@@ -40,7 +40,7 @@ class ResourceController extends BaseController
             $directions[$index] = $direction;
         }
 
-        if( count($directions) !== count($orders) ) {
+        if(count($directions) !== count($orders)) {
             $orders = ["id"];
             $directions = ["asc"];
         }

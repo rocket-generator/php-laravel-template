@@ -16,7 +16,7 @@ return new class extends Migration
 {{- if .Primary }}
             $table->{{ .ObjectType }}('{{ .Name.Original }}')->primary();
 {{- else }}
-            $table->{{ .ObjectType }}('{{ .Name.Original }}'){{ if .Nullable }}->nullable(){{ end }}{{ if ne .DefaultValue "" }}->default({{ .DefaultValue }}){{ end }};
+            $table->{{ .ObjectType }}('{{ .Name.Original }}'){{ if .Nullable }}->nullable(){{ end }}{{ if ne .DefaultValue "" }}->default(""{{ .DefaultValue }}""){{ end }};
 {{- end }}
 {{- end }}
             $table->timestamps();

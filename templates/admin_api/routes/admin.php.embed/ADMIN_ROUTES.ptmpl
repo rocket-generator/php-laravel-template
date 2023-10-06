@@ -1,0 +1,3 @@
+{{- range .Entities}}
+        Route::apiResource('{{ .Name.Plural.Snake }}', \App\Http\Controllers\Api\Admin\{{ .Name.Plural.Title }}Controller::class);
+{{- end }}

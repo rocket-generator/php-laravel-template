@@ -11,29 +11,36 @@ class Status extends Resource
 {
     protected array $columns = [
         'success' => true,
-        'detail' => '',
+        'message' => '',
+        'invalid_params' => [],
+        'code' => 0,
     ];
 
     protected array $optionalColumns = [
+        'invalid_params',
     ];
 
     public static function ok(string $message = '', int $statusCode = 200): static
     {
         $static = new static([
             'success' => true,
-            'detail' => $message,
+            'message' => $message,
         ]);
         $static->withStatus($statusCode);
 
         return $static;
     }
 
-    public static function error(string $message, int $statusCode = 500): static
+    public static function error(string $message, int $statusCode = 500, int $code = 0, array $invalidParams = []): static
     {
         $static = new static([
             'success' => false,
-            'detail' => $message,
+            'message' => $message,
+            'code' => $code,
         ]);
+        if(! empty($invalidParams)) {
+            $static->resource['invalid_params'] = $invalidParams;
+        }
         $static->withStatus($statusCode);
 
         return $static;
