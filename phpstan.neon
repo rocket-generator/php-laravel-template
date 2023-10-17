@@ -1,0 +1,6 @@
+parameters:
+  level: 0
+  paths:
+      - app/
+  autoloadFiles:
+    - _ide_helper.php
