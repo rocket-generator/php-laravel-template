@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature;
 
-use Tests\Feature\TestCase as BaseTestCase;
+use Tests\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
