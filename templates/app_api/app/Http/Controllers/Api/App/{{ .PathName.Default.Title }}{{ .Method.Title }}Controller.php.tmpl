@@ -22,7 +22,7 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
     /**
      * @throws APIErrorException
      */
-    public function {{ .Method.Camel }}(
+    public function __invoke(
 {{- range .Parameters }}
 {{- if eq .In "path" }}
         {{ .ObjectType }} ${{ .Name.Default.Camel }},

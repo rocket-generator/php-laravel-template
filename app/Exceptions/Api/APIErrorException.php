@@ -13,12 +13,12 @@ class APIErrorException extends \Exception
     protected string $errorName = '';
     protected array $extraData = [];
     protected array $config = [];
-    protected int $statusCode = 500;
+    public readonly int $statusCode;
 
     /**
      * APIErrorException constructor.
      */
-    public function __construct(string $message, int $statusCode)
+    public function __construct(string $message, int $statusCode = 500)
     {
         $this->apiMessage = $message;
         $this->statusCode = $statusCode;
