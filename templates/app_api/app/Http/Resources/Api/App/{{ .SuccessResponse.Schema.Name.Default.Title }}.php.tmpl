@@ -15,8 +15,6 @@ use Illuminate\Http\Request;
 
 class {{ .SuccessResponse.Schema.Name.Default.Title }} extends Resource
 {
-    protected array $branches = [];
-
     protected array $columns = [
 {{- range .SuccessResponse.Schema.Properties}}
         '{{ .Name.Original }}' => {{ if eq .Type "array" }}[]{{ else }}''{{ end }},
