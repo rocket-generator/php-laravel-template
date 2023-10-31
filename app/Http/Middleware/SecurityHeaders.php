@@ -17,7 +17,7 @@ class SecurityHeaders
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('X-UA-Compatible', 'chrome=1');
-        if ('application/json' === $response->headers->get('content-type')) {
+        if ($response->headers->get('content-type') === 'application/json') {
             $response->headers->set('Content-Security-Policy', 'default-src \'none\'');
         }
 

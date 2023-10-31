@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Resources\Api;
 
 use App\Http\Resources\Resource;
-use Illuminate\Support\Arr;
 
 class Status extends Resource
 {
@@ -38,7 +37,7 @@ class Status extends Resource
             'message' => $message,
             'code' => $code,
         ]);
-        if(! empty($invalidParams)) {
+        if (! empty($invalidParams)) {
             $static->resource['invalid_params'] = $invalidParams;
         }
         $static->withStatus($statusCode);

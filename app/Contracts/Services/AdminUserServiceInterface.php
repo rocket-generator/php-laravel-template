@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contracts\Services;
 
-use App\Dto\CollectionWithCount;
 use App\Models\AdminUser;
-use Illuminate\Database\Eloquent\Collection;
 
 interface AdminUserServiceInterface extends AuthenticatableServiceInterface
 {

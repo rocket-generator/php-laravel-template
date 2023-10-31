@@ -8,8 +8,8 @@ use App\Contracts\Repositories\SingleKeyModelRepositoryInterface;
 use App\Exceptions\Api\Admin\APIErrorException;
 use App\Http\Requests\Api\Admin\Request;
 use App\Http\Requests\Api\Admin\ResourceUpdate;
-use App\Http\Resources\Api\Admin\Resources;
 use App\Http\Resources\Api\Admin\Resource;
+use App\Http\Resources\Api\Admin\Resources;
 use App\Http\Resources\Api\Admin\Status;
 
 class ResourceController extends BaseController
@@ -18,8 +18,8 @@ class ResourceController extends BaseController
 
     public function index(Request $request): Resources
     {
-        $offset = (int)$request->query('_start', 0);
-        $end = (int)$request->query('_end', 0);
+        $offset = (int) $request->query('_start', 0);
+        $end = (int) $request->query('_end', 0);
         $limit = $end - $offset;
 
         $directionString = $request->query('_order', 'asc');
@@ -29,20 +29,20 @@ class ResourceController extends BaseController
 
         $filter = $request->query('_filter', '');
         $filterArray = [];
-        if($filter !== '') {
+        if ($filter !== '') {
             $filterArray = ['query' => $filter];
         }
 
         foreach ($directions as $index => $direction) {
-            if ('desc' !== $direction) {
+            if ($direction !== 'desc') {
                 $direction = 'asc';
             }
             $directions[$index] = $direction;
         }
 
-        if(count($directions) !== count($orders)) {
-            $orders = ["id"];
-            $directions = ["asc"];
+        if (count($directions) !== count($orders)) {
+            $orders = ['id'];
+            $directions = ['asc'];
         }
 
         $resources = $this->repository->getByFilter($filterArray, $orders, $directions, $offset, $limit);
@@ -74,7 +74,7 @@ class ResourceController extends BaseController
     {
         $resource = $this->repository->create($request->all());
         if (empty($resource)) {
-            throw new APIErrorException("Server error has happened on creation", 500);
+            throw new APIErrorException('Server error has happened on creation', 500);
         }
 
         return (new Resource($resource))->withStatus(201);
@@ -92,7 +92,7 @@ class ResourceController extends BaseController
 
         $resource = $this->repository->update($resource, $request->all());
         if (empty($resource)) {
-            throw new APIErrorException("Server error has happened on updating", 500);
+            throw new APIErrorException('Server error has happened on updating', 500);
         }
 
         return new Resource($resource);
@@ -109,6 +109,6 @@ class ResourceController extends BaseController
         }
         $this->repository->delete($resource);
 
-        return Status::ok("Resource successfully deleted");
+        return Status::ok('Resource successfully deleted');
     }
 }

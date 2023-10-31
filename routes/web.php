@@ -30,6 +30,7 @@ Route::get('/healthz', function () {
             'message' => 'Database connection failed',
         ])->setStatusCode(500);
     }
+
     return response()->json([
         'status' => 'ok',
     ]);

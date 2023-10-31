@@ -11,6 +11,7 @@ class ServerSideException extends Exception
     public const ERROR_UNKNOWN = 0;
 
     public int $statusCode;
+
     public int $errorCode;
 
     public function __construct(string $message, int $statusCode = 500, int $errorCode = 0)
@@ -19,5 +20,4 @@ class ServerSideException extends Exception
         $this->errorCode = $errorCode;
         parent::__construct($message, $errorCode, null);
     }
-
 }

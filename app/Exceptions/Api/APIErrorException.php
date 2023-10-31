@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Exceptions\Api;
 
 use App\Http\Resources\Resource;
-use Illuminate\Http\JsonResponse;
 
 class APIErrorException extends \Exception
 {
     protected string $apiMessage = '';
+
     protected string $errorName = '';
+
     protected array $extraData = [];
+
     protected array $config = [];
+
     public readonly int $statusCode;
 
     /**
@@ -29,5 +32,4 @@ class APIErrorException extends \Exception
     {
         return (new \App\Http\Resources\Resource(null))->withStatus(500);
     }
-
 }

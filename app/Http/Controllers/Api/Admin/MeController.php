@@ -12,6 +12,7 @@ class MeController extends Controller
     public function getMe(): Me
     {
         $user = auth()->user();
+
         return new Me($user);
     }
 }

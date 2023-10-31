@@ -19,9 +19,11 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @property string $password
  * @property int $profile_image_id
  * @property string $api_access_token
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|AuthenticatableBase newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AuthenticatableBase newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AuthenticatableBase query()
+ *
  * @mixin \Eloquent
  */
 class AuthenticatableBase extends Base implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
@@ -32,7 +34,7 @@ class AuthenticatableBase extends Base implements AuthenticatableContract, Autho
     use MustVerifyEmail;
 
     /**
-     * @param ?string $password
+     * @param  ?string  $password
      *
      * @throws BindingResolutionException
      */

@@ -40,7 +40,7 @@ class BaseRepository implements BaseRepositoryInterface
     public function all($order = null, $direction = null): Collection|iterable
     {
         $query = $this->getBaseQuery();
-        if (!empty($order)) {
+        if (! empty($order)) {
             $direction = empty($direction) ? 'asc' : $direction;
             $query = $query->orderBy($order, $direction);
         }
@@ -85,7 +85,7 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $model = $this->getBaseQuery();
         $query = $model->where('is_enabled', '=', true);
-        if (!empty($order)) {
+        if (! empty($order)) {
             $direction = empty($direction) ? 'asc' : $direction;
             $query = $query->orderBy($order, $direction);
         }
@@ -212,36 +212,39 @@ class BaseRepository implements BaseRepositoryInterface
 
     protected function setBefore(Base|Builder|EloquentBuilder $query, string|array $order, string|array $direction, mixed $before): Base|Builder|EloquentBuilder
     {
-        if (0 === $before) {
+        if ($before === 0) {
             return $query;
         }
-        if(is_array($order) && is_array($direction)) {
+        if (is_array($order) && is_array($direction)) {
             foreach ($order as $index => $column) {
-                $query = $query->where($column, 'desc' === $direction[$index] ? '>' : '<', $before);
+                $query = $query->where($column, $direction[$index] === 'desc' ? '>' : '<', $before);
             }
+
             return $query;
         }
-        return $query->where($order, 'desc' === $direction ? '>' : '<', $before);
+
+        return $query->where($order, $direction === 'desc' ? '>' : '<', $before);
     }
 
     protected function setAfter(Base|Builder|EloquentBuilder $query, string|array $order, string|array $direction, mixed $after): Base|Builder|EloquentBuilder
     {
-        if (0 === $after) {
+        if ($after === 0) {
             return $query;
         }
 
-        if(is_array($order) && is_array($direction)) {
+        if (is_array($order) && is_array($direction)) {
             foreach ($order as $index => $column) {
-                $query = $query->where($column, 'desc' === $direction[$index] ? '<' : '>', $after);
+                $query = $query->where($column, $direction[$index] === 'desc' ? '<' : '>', $after);
             }
+
             return $query;
         }
 
-        return $query->where($order, 'desc' === $direction ? '<' : '>', $after);
+        return $query->where($order, $direction === 'desc' ? '<' : '>', $after);
     }
 
     /**
-     * @param int[] $ids
+     * @param  int[]  $ids
      */
     protected function getCacheKey(array $ids): string
     {
@@ -254,7 +257,7 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
-     * @param string[] $orderCandidates
+     * @param  string[]  $orderCandidates
      */
     protected function getWithQueryBuilder(
         Builder $query,
@@ -294,10 +297,10 @@ class BaseRepository implements BaseRepositoryInterface
 
         if (\count($this->querySearchTargets) > 0 && \array_key_exists('query', $filter)) {
             $searchWord = Arr::get($filter, 'query');
-            if (!empty($searchWord)) {
+            if (! empty($searchWord)) {
                 $query = $query->where(function ($q) use ($searchWord): void {
                     foreach ($this->querySearchTargets as $index => $target) {
-                        if (0 === $index) {
+                        if ($index === 0) {
                             $q = $q->where($target, 'LIKE', '%'.$searchWord.'%');
                         } else {
                             $q = $q->orWhere($target, 'LIKE', '%'.$searchWord.'%');
@@ -321,11 +324,11 @@ class BaseRepository implements BaseRepositoryInterface
 
     protected function buildOrder(Base|Builder|EloquentBuilder $query, array $filter, string|array $order, string|array $direction): Base|Builder|EloquentBuilder
     {
-        if (!empty($order)) {
-            if(!is_array($order)) {
+        if (! empty($order)) {
+            if (! is_array($order)) {
                 $order = [$order];
             }
-            if(!is_array($direction)) {
+            if (! is_array($direction)) {
                 $direction = [$direction];
             }
             foreach ($order as $index => $orderElement) {

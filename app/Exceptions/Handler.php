@@ -50,17 +50,18 @@ class Handler extends ExceptionHandler
                 );
             }
             if ($e instanceof APIErrorException) {
-                return Status::error($e->getMessage() . $e->getTraceAsString(), $e->statusCode, 0);
+                return Status::error($e->getMessage().$e->getTraceAsString(), $e->statusCode, 0);
                 //                return $e->getErrorResponse();
             }
             if ($e instanceof ClientSideException) {
-                return Status::error($e->getMessage() . $e->getTraceAsString(), $e->statusCode, $e->errorCode);
+                return Status::error($e->getMessage().$e->getTraceAsString(), $e->statusCode, $e->errorCode);
             }
             \Log::error($e->getTraceAsString());
             if ($e instanceof ServerSideException) {
-                return Status::error($e->getMessage() . $e->getTraceAsString(), $e->statusCode, $e->errorCode);
+                return Status::error($e->getMessage().$e->getTraceAsString(), $e->statusCode, $e->errorCode);
             }
-            return Status::error($e->getMessage() . $e->getTraceAsString(), 500);
+
+            return Status::error($e->getMessage().$e->getTraceAsString(), 500);
         });
     }
 

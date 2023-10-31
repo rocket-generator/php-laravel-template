@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature\Api\Admin;
 
 use App\Models\AdminUser;
-use App\Models\User;
 use Tests\Feature\Api\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase

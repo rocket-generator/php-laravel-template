@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\Login;
 use App\Http\Resources\Api\Admin\Status;
 use App\Http\Resources\Api\Admin\Token;
-use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -36,11 +35,11 @@ class AuthController extends Controller
             'password' => $request->json('password'),
         ];
         $user = $this->adminUserService->signIn($credentials);
-        if (null === $user) {
+        if ($user === null) {
             throw new APIErrorException('Wrong Password or Email address', 401);
         }
         $token = $this->adminUserService->getToken();
-        if (!$token) {
+        if (! $token) {
             throw new APIErrorException('Wrong Password or Email address', 401);
         }
 
@@ -64,6 +63,7 @@ class AuthController extends Controller
     {
         // check remember token
         $user = auth()->user();
+
         return Token::token(auth()->refresh(), (string) $user->id);
     }
 }

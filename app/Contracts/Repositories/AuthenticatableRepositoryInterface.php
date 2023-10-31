@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Contracts\Repositories;
 
-use App\Dto\CollectionWithCount;
 use App\Models\AuthenticatableBase;
 use App\Models\Base;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +22,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method \App\Models\AuthenticatableBase[]|array|\Traversable getByFilter($filter, $order = null, $direction = null, $offset = null, $limit = null);
  * @method \App\Models\AuthenticatableBase[]|array|\Traversable allByFilter($filter, $order = null, $direction = null);
  */
-
 interface AuthenticatableRepositoryInterface extends SingleKeyModelRepositoryInterface
 {
     public function findByEmail(string $email): ?AuthenticatableBase;

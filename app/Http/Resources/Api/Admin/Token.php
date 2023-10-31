@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Resources\Api\Admin;
 
 use App\Http\Resources\Resource;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class Token extends Resource
 {

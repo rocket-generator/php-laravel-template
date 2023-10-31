@@ -15,6 +15,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property mixed $password
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Database\Factories\AdminUserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|AdminUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AdminUser newQuery()
@@ -25,6 +26,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|AdminUser whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AdminUser wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AdminUser whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class AdminUser extends AuthenticatableBase implements JWTSubject
@@ -62,7 +64,7 @@ class AdminUser extends AuthenticatableBase implements JWTSubject
         'password' => 'hashed',
     ];
 
-    protected $primaryKey = "id";
+    protected $primaryKey = 'id';
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

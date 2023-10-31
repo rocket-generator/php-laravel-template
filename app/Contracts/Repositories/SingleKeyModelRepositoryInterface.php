@@ -15,20 +15,18 @@ interface SingleKeyModelRepositoryInterface extends BaseRepositoryInterface
     public function find(string $id): Base|null|Model;
 
     /**
-     * @param string[] $ids
-     *
+     * @param  string[]  $ids
      * @return Base[]|Collection
      */
     public function allByIds(array $ids, string $order = null, string $direction = null, bool $reorder = false): Collection|array;
 
     /**
-     * @param string[] $ids
+     * @param  string[]  $ids
      */
     public function countByIds(array $ids): int;
 
     /**
-     * @param string[] $ids
-     *
+     * @param  string[]  $ids
      * @return Base[]|Collection
      */
     public function getByIds(array $ids, string $order = null, string $direction = null, int $offset = null, int $limit = null): Collection|array;

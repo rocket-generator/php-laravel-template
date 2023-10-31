@@ -43,14 +43,14 @@ class AuthenticatableService extends BaseService implements AuthenticatableServi
     public function signIn(array $input): null|AuthenticatableBase|Authenticatable
     {
         $guard = $this->getGuard();
-        if (!$guard->attempt(['email' => $input['email'], 'password' => $input['password']])) {
+        if (! $guard->attempt(['email' => $input['email'], 'password' => $input['password']])) {
             return null;
         }
 
         return $guard->user();
     }
 
-    public function getToken(): null|string
+    public function getToken(): ?string
     {
         $guard = $this->getGuard();
         $user = $guard->user();
@@ -64,7 +64,7 @@ class AuthenticatableService extends BaseService implements AuthenticatableServi
     public function signUp(array $input, string $uniqueKeyForTracking, string $externalBranchId, string $externalJobId, string $jobRef, string $referrer): null|AuthenticatableBase|Authenticatable
     {
         $existingAuthenticatableBase = $this->authenticatableRepository->findByEmail(Arr::get($input, 'email'));
-        if (!empty($existingAuthenticatableBase)) {
+        if (! empty($existingAuthenticatableBase)) {
             return null;
         }
 

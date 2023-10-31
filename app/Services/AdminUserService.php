@@ -11,8 +11,11 @@ use App\Models\AdminUser;
 class AdminUserService extends AuthenticatableService implements AdminUserServiceInterface
 {
     protected string $resetEmailTitle = 'Reset Password';
+
     protected string $resetEmailTemplate = 'mails.user.reset_password';
+
     protected string $passwordResetLink;
+
     protected string $loginLink;
 
     public function __construct(

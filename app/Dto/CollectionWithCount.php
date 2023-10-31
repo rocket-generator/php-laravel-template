@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 class CollectionWithCount
 {
     public readonly array|Collection $collection;
+
     public readonly int $count;
 
     public function __construct(array|Collection $collection, int $count)

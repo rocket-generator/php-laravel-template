@@ -24,7 +24,7 @@ class JsonRequest extends FormRequest
     protected function failedValidation(Validator $validator): void
     {
         $response = Status::error(
-            "Invalid parameters",
+            'Invalid parameters',
             422,
             ClientSideException::ERROR_INVALID_PARAMETERS,
             $validator->errors()->all(),

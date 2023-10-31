@@ -10,7 +10,9 @@ use App\Http\Requests\JsonRequest as BaseRequest;
 class JsonRequest extends BaseRequest
 {
     protected array $rules = [];
+
     protected array $fields = [];
+
     protected ?array $data = null;
 
     public function rules(): array
@@ -24,7 +26,7 @@ class JsonRequest extends BaseRequest
     public function validate(): void
     {
         $validator = \Validator::make($this->json()->all(), $this->rules());
-        if (!$validator->passes()) {
+        if (! $validator->passes()) {
             throw new APIErrorException(
                 'Invalid Parameter',
                 implode("\n", $validator->errors()->all())
@@ -37,7 +39,7 @@ class JsonRequest extends BaseRequest
         $result = [];
         foreach ($this->fields as $name => $default) {
             $data = $this->json($name, $default);
-            if (null !== $data || $allFields) {
+            if ($data !== null || $allFields) {
                 $result[$name] = $data;
             }
         }

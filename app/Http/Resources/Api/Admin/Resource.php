@@ -14,7 +14,7 @@ class Resource extends BaseResource
     /**
      * Resource constructor.
      *
-     * @param mixed $resource
+     * @param  mixed  $resource
      */
     public function __construct(Base $resource)
     {
@@ -23,8 +23,6 @@ class Resource extends BaseResource
 
     /**
      * Transform the resource into an array.
-     *
-     * @param Request $request
      */
     public function toArray(Request $request): array|\JsonSerializable|Arrayable
     {

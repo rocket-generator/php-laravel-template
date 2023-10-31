@@ -14,7 +14,9 @@ class Resource extends JsonResource
     public static $wrap;
 
     protected array $columns = [];
+
     protected array $optionalColumns = [];
+
     protected int $statusCode = 200;
 
     public function withStatus(int $statusCode): static
@@ -31,9 +33,6 @@ class Resource extends JsonResource
 
     /**
      * Transform the resource into an array.
-     *
-     * @param Request $request
-     * @return array|JsonSerializable|Arrayable
      */
     public function toArray(Request $request): array|JsonSerializable|Arrayable
     {
@@ -55,7 +54,7 @@ class Resource extends JsonResource
                 } else {
                     $ret[$column] = $resourceArray[$column];
                 }
-            } elseif (!\in_array($column, $this->optionalColumns, true)) {
+            } elseif (! \in_array($column, $this->optionalColumns, true)) {
                 $ret[$column] = $this->columns[$column];
             }
         }

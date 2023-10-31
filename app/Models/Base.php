@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Base newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Base newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Base query()
+ *
  * @mixin \Eloquent
  */
 class Base extends Model
