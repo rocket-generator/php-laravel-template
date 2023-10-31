@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\App;
 
-use App\Contracts\Services\{{ .PathName.Default.Title }}ServiceInterface;
+use App\Contracts\Services\{{ .PathName.Singular.Title }}ServiceInterface;
 use App\Exceptions\Api\App\APIErrorException;
 use App\Http\Controllers\Controller;
+{{- if eq .RequestSchemaName.Default.Title "" }}
+use App\Http\Requests\Api\App\Request;
+{{- else }}
 use App\Http\Requests\Api\App\{{ .RequestSchemaName.Default.Title }};
+{{- end }}
 use App\Http\Resources\Api\App\{{ .SuccessResponse.Schema.Name.Default.Title }};
+use App\Http\Resources\Api\App\Status;
 
 class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Controller
 {
-    protected {{ .PathName.Default.Title }}ServiceInterface ${{ .PathName.Default.Camel }}Service;
+    protected {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface $useCase;
 
-    public function __construct({{ .PathName.Default.Title }}ServiceInterface ${{ .PathName.Default.Camel }}Service)
+    public function __construct({{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface $useCase)
     {
-        $this->{{ .PathName.Default.Camel }}Service = ${{ .PathName.Default.Camel }}Service;
+        $this->useCase = $useCase;
     }
 
     /**
@@ -28,14 +33,19 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
         {{ .ObjectType }} ${{ .Name.Default.Camel }},
 {{- end }}
 {{ end }}
+{{- if eq .RequestSchemaName.Default.Title "" }}
+        Request $request
+{{- else }}
+        {{ .RequestSchemaName.Default.Title }} $request
+{{- end }}
         {{ .RequestSchemaName.Default.Title }} $request
     ): {{ .SuccessResponse.Schema.Name.Default.Title }}
     {
-        $data = $this->{{ .PathName.Default.Camel }}Service->exec();
-        if($data === null) {
-            throw new APIErrorException('Not found', 404);
+        $result = $this->{{ .Method.Title }}{{ .PathName.Default.Title }}UseCase->handle();
+        if (!$success) {
+            throw new APIErrorException('something wrong', 400);
         }
 
-        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($data);
+        return Status::ok("success", 200);
     }
 }

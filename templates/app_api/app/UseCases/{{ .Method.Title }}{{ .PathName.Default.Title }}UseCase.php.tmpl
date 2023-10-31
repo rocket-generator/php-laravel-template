@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\UseCases\App;
+
+use App\Contracts\UseCases\App\{{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface;
+use App\Contracts\Services\{{ .PathName.Singular.Title }}ServiceInterface;
+use App\Exceptions\Services\ClientSideException;
+use App\Exceptions\Services\ExternalServiceException;
+use App\Exceptions\Services\ServerSideException;
+
+class {{ .Method.Title }}{{ .PathName.Default.Title }}UseCase extends BaseUseCase implements {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface
+{
+    protected {{ .PathName.Singular.Title }}ServiceInterface ${{ .PathName.Singular.Camel }}service;
+
+    public function __construct(
+        {{ .PathName.Singular.Title }}ServiceInterface  ${{ .PathName.Singular.Camel }}service
+    ) {
+        $this->{{ .PathName.Singular.Camel }}Service = ${{ .PathName.Singular.Camel }}Service;
+    }
+
+    /**
+     * @throws ClientSideException
+     * @throws ExternalServiceException
+     * @throws ServerSideException
+     */
+    public function handle(): bool {
+        return true;
+    }
+}

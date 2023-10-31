@@ -54,7 +54,7 @@ class Resource extends JsonResource
                 } else {
                     $ret[$column] = $resourceArray[$column];
                 }
-            } elseif (! \in_array($column, $this->optionalColumns, true)) {
+            } elseif (!\in_array($column, $this->optionalColumns, true)) {
                 $ret[$column] = $this->columns[$column];
             }
         }

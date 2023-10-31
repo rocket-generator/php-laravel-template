@@ -17,12 +17,4 @@ class {{ .PathName.Singular.Title }}Service extends BaseService implements {{ .P
     ) {
         $this->{{ .PathName.Singular.Camel }}Repository = ${{ .PathName.Singular.Camel }}Repository;
     }
-
-    public function exec(): null
-    {
-        // do something
-        // ${{ .PathName.Singular.Camel }} = $this->{{ .PathName.Singular.Camel }}Repository->get();
-        // return ${{ .PathName.Singular.Camel }};
-        return null;
-    }
 }

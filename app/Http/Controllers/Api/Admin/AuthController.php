@@ -39,7 +39,7 @@ class AuthController extends Controller
             throw new APIErrorException('Wrong Password or Email address', 401);
         }
         $token = $this->adminUserService->getToken();
-        if (! $token) {
+        if (!$token) {
             throw new APIErrorException('Wrong Password or Email address', 401);
         }
 

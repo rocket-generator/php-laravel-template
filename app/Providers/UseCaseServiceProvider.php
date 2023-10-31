@@ -13,7 +13,7 @@ class UseCaseServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        /* [REGISTER_USECASES] */
     }
 
     /**
