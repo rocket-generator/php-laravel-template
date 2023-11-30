@@ -74,7 +74,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         $primaryKey = $this->getPrimaryKey();
 
         $query = $modelClass::whereIn($primaryKey, $ids);
-        if (!empty($order)) {
+        if (! empty($order)) {
             $direction = empty($direction) ? 'asc' : $direction;
             $query = $query->orderBy($order, $direction);
         }
@@ -83,7 +83,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
 
         $models = $query->get();
 
-        if (!$reorder) {
+        if (! $reorder) {
             return $models;
         }
 
@@ -94,7 +94,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         }
         foreach ($ids as $id) {
             $model = $map[$id];
-            if (!empty($model)) {
+            if (! empty($model)) {
                 $result->push($model);
             }
         }
@@ -135,7 +135,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         $primaryKey = $this->getPrimaryKey();
 
         $query = $modelClass::whereIn($primaryKey, $ids);
-        if (!empty($order)) {
+        if (! empty($order)) {
             $direction = empty($direction) ? 'asc' : $direction;
             $query = $query->orderBy($order, $direction);
         }
@@ -192,7 +192,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
 
     public function save(Base $model): ?Base
     {
-        if (!$model->save()) {
+        if (! $model->save()) {
             return null;
         }
 
@@ -266,7 +266,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         $query = $this->setBefore($query, $order, $direction, $before);
         $query = $this->setAfter($query, $order, $direction, $after);
 
-        if (!empty($order)) {
+        if (! empty($order)) {
             $direction = empty($direction) ? 'asc' : $direction;
             $query = $query->orderBy($order, $direction);
         }

@@ -40,7 +40,7 @@ class BaseRepository implements BaseRepositoryInterface
     public function all($order = null, $direction = null): Collection|iterable
     {
         $query = $this->getBaseQuery();
-        if (!empty($order)) {
+        if (! empty($order)) {
             $direction = empty($direction) ? 'asc' : $direction;
             $query = $query->orderBy($order, $direction);
         }
@@ -85,7 +85,7 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $model = $this->getBaseQuery();
         $query = $model->where('is_enabled', '=', true);
-        if (!empty($order)) {
+        if (! empty($order)) {
             $direction = empty($direction) ? 'asc' : $direction;
             $query = $query->orderBy($order, $direction);
         }
@@ -297,7 +297,7 @@ class BaseRepository implements BaseRepositoryInterface
 
         if (\count($this->querySearchTargets) > 0 && \array_key_exists('query', $filter)) {
             $searchWord = Arr::get($filter, 'query');
-            if (!empty($searchWord)) {
+            if (! empty($searchWord)) {
                 $query = $query->where(function ($q) use ($searchWord): void {
                     foreach ($this->querySearchTargets as $index => $target) {
                         if ($index === 0) {
@@ -324,11 +324,11 @@ class BaseRepository implements BaseRepositoryInterface
 
     protected function buildOrder(Base|Builder|EloquentBuilder $query, array $filter, string|array $order, string|array $direction): Base|Builder|EloquentBuilder
     {
-        if (!empty($order)) {
-            if (!is_array($order)) {
+        if (! empty($order)) {
+            if (! is_array($order)) {
                 $order = [$order];
             }
-            if (!is_array($direction)) {
+            if (! is_array($direction)) {
                 $direction = [$direction];
             }
             foreach ($order as $index => $orderElement) {

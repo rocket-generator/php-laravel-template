@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\UseCases\App;
+namespace App\UseCases;
 
-use App\Contracts\UseCases\App\{{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface;
+use App\Contracts\UseCases\{{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface;
 use App\Contracts\Services\{{ .PathName.Singular.Title }}ServiceInterface;
 use App\Exceptions\Services\ClientSideException;
 use App\Exceptions\Services\ExternalServiceException;
@@ -12,10 +12,10 @@ use App\Exceptions\Services\ServerSideException;
 
 class {{ .Method.Title }}{{ .PathName.Default.Title }}UseCase extends BaseUseCase implements {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface
 {
-    protected {{ .PathName.Singular.Title }}ServiceInterface ${{ .PathName.Singular.Camel }}service;
+    protected {{ .PathName.Singular.Title }}ServiceInterface ${{ .PathName.Singular.Camel }}Service;
 
     public function __construct(
-        {{ .PathName.Singular.Title }}ServiceInterface  ${{ .PathName.Singular.Camel }}service
+        {{ .PathName.Singular.Title }}ServiceInterface  ${{ .PathName.Singular.Camel }}Service
     ) {
         $this->{{ .PathName.Singular.Camel }}Service = ${{ .PathName.Singular.Camel }}Service;
     }

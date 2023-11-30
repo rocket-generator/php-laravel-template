@@ -37,7 +37,7 @@ class Status extends Resource
             'message' => $message,
             'code' => $code,
         ]);
-        if (!empty($invalidParams)) {
+        if (! empty($invalidParams)) {
             $static->resource['invalid_params'] = $invalidParams;
         }
         $static->withStatus($statusCode);

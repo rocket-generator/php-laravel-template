@@ -49,6 +49,9 @@ class Handler extends ExceptionHandler
                     $e->validator->errors()->all()
                 );
             }
+            if ($e instanceof \Illuminate\Auth\AuthenticationException) {
+                return Status::error($e->getMessage(), 401);
+            }
             if ($e instanceof APIErrorException) {
                 return Status::error($e->getMessage().$e->getTraceAsString(), $e->statusCode, 0);
                 //                return $e->getErrorResponse();
