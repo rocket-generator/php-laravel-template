@@ -1,0 +1,65 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Feature\Api\Admin\{{ .Name.Plural.Title }};
+
+use App\Models\{{ .Name.Singular.Title }};
+use Tests\Feature\Api\Admin\TestCase;
+
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class {{ .Name.Singular.Title }}CRUDTest extends TestCase
+{
+    public function testApiGet{{ .Name.Plural.Title }}Successfully(): void
+    {
+        $headers = $this->getAuthHeaders();
+        $response = $this->get('/api/admin/{{ .Name.Plural.Snake }}', $headers);
+        $response->assertStatus(200);
+    }
+
+    public function testApiGet{{ .Name.Singular.Title }}Successfully(): void
+    {
+        $model = {{ .Name.Singular.Title }}::first();
+
+        $headers = $this->getAuthHeaders();
+        $response = $this->get("/api/admin/{{ .Name.Plural.Snake }}/{$model->id}", $headers);
+        $response->assertStatus(200);
+    }
+
+    public function testApiCreate{{ .Name.Singular.Title }}Successfully(): void
+    {
+        $model = {{ .Name.Singular.Title }}::factory()->make()->toArray();
+
+        $headers = $this->getAuthHeaders();
+        $response = $this->postJson("/api/admin/{{ .Name.Plural.Snake }}", $model, $headers);
+        $response->assertStatus(201);
+    }
+
+    public function testApiUpdate{{ .Name.Singular.Title }}Successfully(): void
+    {
+        $model = {{ .Name.Singular.Title }}::first();
+        $newData = fake()->name;
+
+        $headers = $this->getAuthHeaders();
+        $response = $this->putJson("/api/admin/{{ .Name.Plural.Snake }}/{$model->id}", [
+            'name' => $newData,
+        ], $headers);
+        $response->assertStatus(200);
+    }
+
+    public function testApiDelete{{ .Name.Singular.Title }}Successfully(): void
+    {
+        /** @var {{ .Name.Singular.Title }} $model */
+        $model = {{ .Name.Singular.Title }}::factory()->create();
+
+        $headers = $this->getAuthHeaders();
+        $response = $this->delete("/api/admin/{{ .Name.Plural.Snake }}/{$model->id}", [
+        ], $headers);
+        $response->assertStatus(200);
+    }
+
+}

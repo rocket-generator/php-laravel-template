@@ -18,8 +18,8 @@ class ResourceController extends BaseController
 
     public function index(Request $request): Resources
     {
-        $offset = (int) $request->query('_start', 0);
-        $end = (int) $request->query('_end', 0);
+        $offset = (int) $request->query('_start', '0');
+        $end = (int) $request->query('_end', '100');
         $limit = $end - $offset;
 
         $directionString = $request->query('_order', 'asc');
