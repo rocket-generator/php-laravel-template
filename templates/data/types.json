@@ -8,5 +8,7 @@
     "int": "integer",
     "bigint": "bigInteger",
     "jsonb": "array",
-    "varchar": "string"
+    "varchar": "string",
+    "bigserial": "bigIncrements",
+    "serial": "increments"
 }

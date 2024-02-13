@@ -10,7 +10,9 @@ class {{ .RequestSchemaName.Default.Title }} extends Request
     protected array $rules = [
 {{- range .RequestSchema.Properties}}
 {{- if eq .Required false }}
-        '{{ .Name.Default.Title }}' => 'required',
+        '{{ .Name.Original }}' => '',
+{{- else }}
+        '{{ .Name.Original }}' => 'required',
 {{- end }}
 {{- end }}
     ];

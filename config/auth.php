@@ -40,6 +40,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'admin_users',
         ],
+        'app' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
         /*
         'web' => [
             'driver' => 'session',
@@ -70,12 +74,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\AdminUser::class,
         ],
-        /*
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        */
     ],
 
     /*
@@ -101,6 +103,12 @@ return [
         'admin_users' => [
             'provider' => 'admin_users',
             'table' => 'admin_password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'users' => [
+            'provider' => 'users',
+            'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],

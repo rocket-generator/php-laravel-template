@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+{{- range .RelatedModels}}
+use App\Contracts\Repositories\{{ .Singular.Title }}RepositoryInterface;
+{{- end}}
+use App\Contracts\Services\{{ .Name.Singular.Title }}ServiceInterface;
+
+
+class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.Singular.Title }}ServiceInterface
+{
+
+{{- range .RelatedModels}}
+    protected {{ .Singular.Title }}RepositoryInterface ${{ .Singular.Camel }}Repository;
+{{- end}}
+
+    public function __construct(
+{{- range .RelatedModels}}
+        {{ .Singular.Title }}RepositoryInterface ${{ .Singular.Camel }}Repository,
+{{- end}}
+    ) {
+{{- range .RelatedModels}}
+        $this->{{ .Singular.Camel }}Repository = ${{ .Singular.Camel }}Repository;
+{{- end}}
+    }
+}

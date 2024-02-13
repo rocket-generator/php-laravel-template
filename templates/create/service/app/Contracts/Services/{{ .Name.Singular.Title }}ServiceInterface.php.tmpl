@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Contracts\Services;
 
 use App\Dto\CollectionWithCount;
-use App\Models\{{ .PathName.Singular.Title }};
+use App\Models\{{ .Name.Singular.Title }};
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 
-interface {{ .PathName.Singular.Title }}ServiceInterface extends BaseServiceInterface
+interface {{ .Name.Singular.Title }}ServiceInterface extends BaseServiceInterface
 {
 }

@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('{{ .Name.Original }}', function (Blueprint $table) {
 {{- range .Columns}}
 {{- if .Primary }}
+{{ if or (eq .ObjectType "bigIncrements") (eq .ObjectType "increments") }}
+            $table->{{ .ObjectType }}('{{ .Name.Original }}');
+{{- else }}
             $table->{{ .ObjectType }}('{{ .Name.Original }}')->primary();
+{{- end }}
 {{- else }}
             $table->{{ .ObjectType }}('{{ .Name.Original }}'){{ if .Nullable }}->nullable(){{ end }}{{ if ne .DefaultValue "" }}->default(""{{ .DefaultValue }}""){{ end }};
 {{- end }}

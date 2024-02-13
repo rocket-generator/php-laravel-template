@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Dto;
+
+readonly class {{ .Name.Singular.Title }}
+{
+
+{{- range .RelatedResponse.Schema.Properties}}
+    public {{ .Type }} ${{ .Name.Default.Camel }};
+{{- end}}
+
+    public function __construct(
+{{- range .RelatedResponse.Schema.Properties}}
+        {{ .Type }} ${{ .Name.Default.Camel }},
+{{- end}}
+    ) {
+{{- range .RelatedResponse.Schema.Properties}}
+        $this->{{ .Name.Default.Camel }} = ${{ .Name.Default.Camel }};
+{{- end}}
+    }
+
+{{- if gt (len .RelatedModels) 0 }}
+    public static function createFromModel(
+{{- range .RelatedModels }}
+        \App\Models\{{ .Singular.Title }} $model
+{{- end}}
+    ): ?static
+    {
+        return new static(
+{{- range .RelatedResponse.Schema.Properties}}
+            $model->{{ .Name.Default.Camel }},
+{{- end}}
+        );
+    }
+{{- end}}
+}

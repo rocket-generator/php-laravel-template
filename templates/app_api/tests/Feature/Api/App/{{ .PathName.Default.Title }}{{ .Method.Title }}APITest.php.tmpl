@@ -25,7 +25,7 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
         $token = $this->getAuthToken();
 {{- if eq .Method.Snake "get" }}
         $response = $this->get(
-            '/api/app/{{ .Path }}',
+            '/api/app{{ .Path }}',
             [
             ],
             [
@@ -34,7 +34,7 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
         );
 {{- else if eq .Method.Snake "delete" }}
         $response = $this->delete(
-            '/api/app/{{ .Path }}',
+            '/api/app{{ .Path }}',
             [
 {{- if ne .RequestSchema nil }}
 {{- range .RequestSchema.Properties}}

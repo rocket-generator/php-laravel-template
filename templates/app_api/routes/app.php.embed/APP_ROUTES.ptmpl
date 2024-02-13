@@ -1,3 +1,22 @@
+{{- if and (ne .RequestGroups nil) (ne (len .RequestGroups) 0) }}
+{{- range .RequestGroups}}
+{{- if gt (len .Requests) 1 }}
+    Route::group([
+        'prefix' => '{{ .PathPrefix }}',
+    ], function ($router): void {
 {{- range .Requests}}
-        $router->get('{{ .Path }}', [{{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class, '{{ .Method.Camel }}']);
+        $router->{{ .Method.Camel }}('{{ .GroupRelativePath }}', {{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
+{{- end}}
+    });
+
+{{- else }}
+{{- range .Requests}}
+    $router->{{ .Method.Camel }}('{{ .Path }}', {{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
+{{- end}}
+{{- end}}
+{{- end}}
+{{- else }}
+{{- range .Requests}}
+    $router->{{ .Method.Camel }}('{{ .Path }}', {{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
+{{- end}}
 {{- end}}

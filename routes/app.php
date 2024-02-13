@@ -19,18 +19,6 @@ Route::group([
     'namespace' => 'app',
     'as' => 'app.',
 ], function ($router): void {
-    Route::group([
-        'prefix' => 'auth',
-    ], function ($router): void {
-        // $router->post('registration', [AuthController::class, 'registration']);
-    });
-
-    Route::group([
-        'middleware' => ['auth:app'],
-    ], function ($router): void {
-        // $router->get('me', [MeController::class, 'getMe']);
-        // $router->put('me', [MeController::class, 'updateMe']);
-    });
 
     /* [APP_ROUTES] */
 

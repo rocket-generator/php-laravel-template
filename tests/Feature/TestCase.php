@@ -8,4 +8,5 @@ use Tests\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    protected bool $useDatabase = true;
 }

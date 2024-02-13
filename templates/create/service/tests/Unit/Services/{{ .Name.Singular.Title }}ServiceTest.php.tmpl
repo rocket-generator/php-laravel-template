@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit\Services;
+
+use App\Contracts\Services\{{ .Name.Singular.Title }}ServiceInterface;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Tests\TestCase;
+
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class {{ .Name.Singular.Title }}ServiceTest extends TestCase
+{
+    /**
+     * Test {{ .Name.Singular.Title }}Service create.
+     *
+     * @throws BindingResolutionException
+     */
+    public function testCreate{{ .Name.Singular.Title }}ServiceInstanceSuccessfully(): void
+    {
+        $service = app()->make({{ .Name.Singular.Title }}ServiceInterface::class);
+        static::assertNotNull($service);
+    }
+}
