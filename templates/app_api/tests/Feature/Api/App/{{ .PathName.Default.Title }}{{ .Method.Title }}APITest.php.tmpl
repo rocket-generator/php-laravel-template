@@ -27,9 +27,7 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
         $response = $this->get(
             '/api/app{{ .Path }}',
             [
-            ],
-            [
-                'Authorization' => 'UIID '.$token,
+                'Authorization' => 'bearer '.$token,
             ]
         );
 {{- else if eq .Method.Snake "delete" }}
@@ -45,7 +43,7 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
 {{- end }}
             ],
             [
-                'Authorization' => 'UIID '.$token,
+                'Authorization' => 'bearer '.$token,
             ]
         );
 {{- else }}
@@ -54,7 +52,7 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
             [
             ],
             [
-                'Authorization' => 'UIID '.$token,
+                'Authorization' => 'bearer '.$token,
             ]
         );
 {{- end }}

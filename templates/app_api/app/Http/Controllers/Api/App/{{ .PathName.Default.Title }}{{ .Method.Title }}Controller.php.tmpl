@@ -14,6 +14,7 @@ use App\Http\Requests\Api\App\Request;
 use App\Http\Requests\Api\App\{{ .RequestSchemaName.Default.Title }};
 {{- end }}
 use App\Http\Resources\Api\App\{{ .SuccessResponse.Schema.Name.Default.Title }};
+use App\Http\Resources\Api\App\Status;
 
 class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Controller
 {
@@ -32,7 +33,7 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
 {{- if eq .In "path" }}
         {{ .ObjectType }} ${{ .Name.Default.Camel }},
 {{- end }}
-{{ end }}
+{{- end }}
 {{- if eq .RequestSchemaName.Default.Title "" }}
         Request $request
 {{- else }}
@@ -40,11 +41,45 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
 {{- end }}
     ): {{ .SuccessResponse.Schema.Name.Default.Title }}
     {
+{{- if eq .RequestType "crud" }}
+{{- if eq .Method.Camel "get" }}
+{{- if .SuccessResponse.IsList }}
+        $offset = (int) $request->query('_start', 0);
+        $end = (int) $request->query('_end', 20);
+        $limit = $end - $offset;
+        $order = $request->query('_sort', 'id');
+        $direction = $request->query('_order', 'asc');
+
+        $collection = $this->useCase->handle($offset, $limit, $order, $direction);
+
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($collection);
+{{- else }}
+        $dto = $this->useCase->handle($id);
+
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto);
+{{- end }}
+{{- else if eq .Method.Camel "post" }}
+        $data = $request->validated();
+        $dto = $this->useCase->handle($data);
+
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto);
+{{- else if eq .Method.Camel "put" }}
+        $data = $request->validated();
+        $dto = $this->useCase->handle($id, $data);
+
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto);
+{{- else if eq .Method.Camel "delete" }}
+        $status = $this->useCase->handle($id);
+
+        return new Status(true);
+{{- end }}
+{{- else }}
         $success = $this->useCase->handle();
         if (!$success) {
             throw new APIErrorException('something wrong', 400);
         }
 
         return new {{ .SuccessResponse.Schema.Name.Default.Title }}([]);
+{{- end }}
     }
 }

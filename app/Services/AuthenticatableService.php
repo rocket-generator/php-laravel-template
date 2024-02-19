@@ -40,10 +40,10 @@ class AuthenticatableService extends BaseService implements AuthenticatableServi
         return '';
     }
 
-    public function signIn(array $input): null|AuthenticatableBase|Authenticatable
+    public function signIn(string $email, string $password): null|AuthenticatableBase|Authenticatable
     {
         $guard = $this->getGuard();
-        if (! $guard->attempt(['email' => $input['email'], 'password' => $input['password']])) {
+        if (! $guard->attempt(['email' => $email, 'password' => $password])) {
             return null;
         }
 

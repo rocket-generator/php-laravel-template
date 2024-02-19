@@ -12,7 +12,7 @@ interface AuthenticatableServiceInterface extends BaseServiceInterface
 {
     public function signInById(string $id): ?Authenticatable;
 
-    public function signIn(array $input): null|AuthenticatableBase|Authenticatable;
+    public function signIn(string $email, string $password): null|AuthenticatableBase|Authenticatable;
 
     public function getToken(): ?string;
 

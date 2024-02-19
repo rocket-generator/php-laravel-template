@@ -20,22 +20,22 @@ interface BaseRepositoryInterface
     /**
      * Get All Model's query.
      */
-    public function allByFilterQuery(array $filter, string|array $order = null, string|array $direction = null): Builder;
+    public function allByFilterQuery(array $filter, string|array|null $order = null, string|array|null $direction = null): Builder;
 
     /**
      * Get All Models.
      */
-    public function all(string|array $order = null, string|array $direction = null): Collection|iterable;
+    public function all(string|array|null $order = null, string|array|null $direction = null): Collection|iterable;
 
     /**
      * Get All Enabled Models.
      */
-    public function allEnabled(string|array $order = null, string|array $direction = null): Collection|iterable;
+    public function allEnabled(string|array|null $order = null, string|array|null $direction = null): Collection|iterable;
 
     /**
      * Get All Models with filter conditions.
      */
-    public function allByFilter(array $filter, string|array $order = null, string|array $direction = null): Collection|iterable;
+    public function allByFilter(array $filter, string|array|null $order = null, string|array|null $direction = null): Collection|iterable;
 
     /**
      * Get Models with Order.
@@ -96,5 +96,5 @@ interface BaseRepositoryInterface
      */
     public function messages(): array;
 
-    public function pluck(\Illuminate\Support\Collection $collection, string $value, string $key = null): \Illuminate\Support\Collection;
+    public function pluck(\Illuminate\Support\Collection $collection, string $value, ?string $key = null): \Illuminate\Support\Collection;
 }

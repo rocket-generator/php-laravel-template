@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Contracts\Repositories;
 
 use App\Models\{{ .Name.Singular.Title }};
+use App\Models\Base;
 use Illuminate\Database\Query\Builder;
 
 /**
@@ -23,5 +24,5 @@ use Illuminate\Database\Query\Builder;
  */
 interface {{ .Name.Singular.Title }}RepositoryInterface extends SingleKeyModelRepositoryInterface
 {
-    public function getBlankModel(): {{ .Name.Singular.Title }}|Builder;
+    public function getBlankModel(): Base|Builder;
 }

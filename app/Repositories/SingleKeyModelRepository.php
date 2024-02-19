@@ -65,7 +65,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         }
     }
 
-    public function allByIds(array $ids, string $order = null, string $direction = null, bool $reorder = false): Collection|array
+    public function allByIds(array $ids, ?string $order = null, ?string $direction = null, bool $reorder = false): Collection|array
     {
         if (\count($ids) === 0) {
             return $this->getEmptyList();
@@ -126,7 +126,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
     /**
      * @param  string[]  $ids
      */
-    public function getByIds(array $ids, string $order = null, string $direction = null, int $offset = null, int $limit = null): Collection|array
+    public function getByIds(array $ids, ?string $order = null, ?string $direction = null, ?int $offset = null, ?int $limit = null): Collection|array
     {
         if (\count($ids) === 0) {
             return $this->getEmptyList();

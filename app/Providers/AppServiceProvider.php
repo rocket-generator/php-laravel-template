@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if($this->app->environment('testing')){
+        if ($this->app->environment('testing')) {
             $this->loadMigrationsFrom(base_path('tests/database/migrations'));
         }
     }

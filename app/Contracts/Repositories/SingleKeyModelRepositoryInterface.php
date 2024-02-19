@@ -18,7 +18,7 @@ interface SingleKeyModelRepositoryInterface extends BaseRepositoryInterface
      * @param  string[]  $ids
      * @return Base[]|Collection
      */
-    public function allByIds(array $ids, string $order = null, string $direction = null, bool $reorder = false): Collection|array;
+    public function allByIds(array $ids, ?string $order = null, ?string $direction = null, bool $reorder = false): Collection|array;
 
     /**
      * @param  string[]  $ids
@@ -29,7 +29,7 @@ interface SingleKeyModelRepositoryInterface extends BaseRepositoryInterface
      * @param  string[]  $ids
      * @return Base[]|Collection
      */
-    public function getByIds(array $ids, string $order = null, string $direction = null, int $offset = null, int $limit = null): Collection|array;
+    public function getByIds(array $ids, ?string $order = null, ?string $direction = null, ?int $offset = null, ?int $limit = null): Collection|array;
 
     public function create(array $input): Base;
 

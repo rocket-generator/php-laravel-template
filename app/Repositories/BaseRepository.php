@@ -40,7 +40,7 @@ class BaseRepository implements BaseRepositoryInterface
     public function all($order = null, $direction = null): Collection|iterable
     {
         $query = $this->getBaseQuery();
-        if (!empty($order)) {
+        if (! empty($order)) {
             $query = $this->setOrderBy($query, $order, $direction);
         }
 
@@ -84,7 +84,7 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $model = $this->getBaseQuery();
         $query = $model->where('is_enabled', '=', true);
-        if (!empty($order)) {
+        if (! empty($order)) {
             $query = $this->setOrderBy($query, $order, $direction);
         }
 
@@ -102,7 +102,7 @@ class BaseRepository implements BaseRepositoryInterface
         $query = $this->queryOptions($query);
         $query = $this->setOrderBy($query, $order, $direction);
 
-        return $query->orderBy($order, $direction)->skip($offset)->take($limit)->get();
+        return $query->skip($offset)->take($limit)->get();
     }
 
     public function getByFilter($filter, $order = 'id', $direction = 'asc', $offset = 0, $limit = 20, $before = 0, $after = 0): Collection|iterable
@@ -175,7 +175,7 @@ class BaseRepository implements BaseRepositoryInterface
         return $query->delete();
     }
 
-    public function pluck(\Illuminate\Support\Collection $collection, string $value, string $key = null): \Illuminate\Support\Collection
+    public function pluck(\Illuminate\Support\Collection $collection, string $value, ?string $key = null): \Illuminate\Support\Collection
     {
         $items = [];
         foreach ($collection as $model) {
@@ -254,34 +254,34 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
-     * @param int[] $ids
+     * @param  int[]  $ids
      */
     protected function getCacheKey(array $ids): string
     {
         $key = $this->cachePrefix;
         foreach ($ids as $id) {
-            $key .= '-' . $id;
+            $key .= '-'.$id;
         }
 
         return $key;
     }
 
     /**
-     * @param string[] $orderCandidates
+     * @param  string[]  $orderCandidates
      */
     protected function getWithQueryBuilder(
         Builder $query,
-        string  $order,
-        string  $direction,
-        int     $offset,
-        int     $limit,
-        array   $orderCandidates = [],
-        string  $orderDefault = 'id'
+        string $order,
+        string $direction,
+        int $offset,
+        int $limit,
+        array $orderCandidates = [],
+        string $orderDefault = 'id'
     ): \Illuminate\Support\Collection {
         $order = strtolower($order);
         $direction = strtolower($direction);
-        $offset = (int)$offset;
-        $limit = (int)$limit;
+        $offset = (int) $offset;
+        $limit = (int) $limit;
         $order = \in_array($order, $orderCandidates, true) ? $order : strtolower($orderDefault);
         $direction = \in_array($direction, ['asc', 'desc'], true) ? $direction : 'asc';
 
@@ -307,13 +307,13 @@ class BaseRepository implements BaseRepositoryInterface
 
         if (\count($this->querySearchTargets) > 0 && \array_key_exists('query', $filter)) {
             $searchWord = Arr::get($filter, 'query');
-            if (!empty($searchWord)) {
+            if (! empty($searchWord)) {
                 $query = $query->where(function ($q) use ($searchWord): void {
                     foreach ($this->querySearchTargets as $index => $target) {
                         if ($index === 0) {
-                            $q = $q->where($target, 'LIKE', '%' . $searchWord . '%');
+                            $q = $q->where($target, 'LIKE', '%'.$searchWord.'%');
                         } else {
-                            $q = $q->orWhere($target, 'LIKE', '%' . $searchWord . '%');
+                            $q = $q->orWhere($target, 'LIKE', '%'.$searchWord.'%');
                         }
                     }
                 });
@@ -323,9 +323,9 @@ class BaseRepository implements BaseRepositoryInterface
 
         foreach ($filter as $column => $value) {
             if (\is_array($value)) {
-                $query = $query->whereIn($tableName . '.' . $column, $value);
+                $query = $query->whereIn($tableName.'.'.$column, $value);
             } else {
-                $query = $query->where($tableName . '.' . $column, $value);
+                $query = $query->where($tableName.'.'.$column, $value);
             }
         }
 
@@ -334,11 +334,11 @@ class BaseRepository implements BaseRepositoryInterface
 
     protected function buildOrder(Base|Builder|EloquentBuilder $query, array $filter, string|array $order, string|array $direction): Base|Builder|EloquentBuilder
     {
-        if (!empty($order)) {
-            if (!is_array($order)) {
+        if (! empty($order)) {
+            if (! is_array($order)) {
                 $order = [$order];
             }
-            if (!is_array($direction)) {
+            if (! is_array($direction)) {
                 $direction = [$direction];
             }
             foreach ($order as $index => $orderElement) {

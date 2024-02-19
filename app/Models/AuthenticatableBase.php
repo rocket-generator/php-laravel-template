@@ -12,6 +12,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * App\Models\AuthenticatableBase
@@ -32,6 +33,7 @@ class AuthenticatableBase extends Base implements AuthenticatableContract, Autho
     use Authorizable;
     use CanResetPassword;
     use MustVerifyEmail;
+    use Notifiable;
 
     /**
      * @param  ?string  $password

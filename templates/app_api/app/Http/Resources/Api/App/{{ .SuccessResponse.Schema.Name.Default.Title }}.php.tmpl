@@ -50,18 +50,29 @@ class {{ .SuccessResponse.Schema.Name.Default.Title }} extends Resource
      */
     public function toArray($request): array|\JsonSerializable|Arrayable
     {
+{{- if .SuccessResponse.IsList }}
+        $data = [];
+        foreach ($this->resource->collection as $dto) {
+            $data[] = new {{ .SuccessResponse.Schema.Name.Singular.Title }}($dto);
+        }
+
+        return [
+            'data' => $data,
+            'count' => $this->resource->count,
+        ];
+{{- else }}
         $result = [
 {{- if ne .SuccessResponse.RelatedEntity nil }}
 {{- range .SuccessResponse.Schema.Properties}}
-            '{{ .Name.Original }}' => $this->resource->{{ .Name.Original }},
+            '{{ .Name.Original }}' => $this->resource->{{ .Name.Default.Camel }},
 {{- end }}
 {{- else }}
 {{- range .SuccessResponse.Schema.Properties}}
             '{{ .Name.Original }}' => {{if eq .Type "array" }}[]{{ else }}''{{ end}},
 {{- end }}
 {{- end }}
-
         ];
         return $result;
+{{- end }}
     }
 }

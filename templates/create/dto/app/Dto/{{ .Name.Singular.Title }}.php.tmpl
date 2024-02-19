@@ -30,7 +30,7 @@ readonly class {{ .Name.Singular.Title }}
     {
         return new static(
 {{- range .RelatedResponse.Schema.Properties}}
-            $model->{{ .Name.Default.Camel }},
+            $model->{{ .Name.Default.Snake }},
 {{- end}}
         );
     }

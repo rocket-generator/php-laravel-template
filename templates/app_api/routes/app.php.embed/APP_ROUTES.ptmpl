@@ -3,20 +3,21 @@
 {{- if gt (len .Requests) 1 }}
     Route::group([
         'prefix' => '{{ .PathPrefix }}',
+        'as' => '{{ .PathPrefix }}.',
     ], function ($router): void {
 {{- range .Requests}}
-        $router->{{ .Method.Camel }}('{{ .GroupRelativePath }}', {{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
+        $router->{{ .Method.Camel }}('{{ .GroupRelativePath }}', [{{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class, '__invoke']){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
 {{- end}}
     });
 
 {{- else }}
 {{- range .Requests}}
-    $router->{{ .Method.Camel }}('{{ .Path }}', {{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
+    $router->{{ .Method.Camel }}('{{ .Path }}', [{{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class, '__invoke']){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
 {{- end}}
 {{- end}}
 {{- end}}
 {{- else }}
 {{- range .Requests}}
-    $router->{{ .Method.Camel }}('{{ .Path }}', {{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
+    $router->{{ .Method.Camel }}('{{ .Path }}', [{{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class, '__invoke']){{ if .RequireAuth }}->middleware('auth:api'){{ end }};
 {{- end}}
 {{- end}}
