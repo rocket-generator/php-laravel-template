@@ -13,6 +13,19 @@ class UseCaseServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(
+            \App\Contracts\UseCases\PostAuthAuthorizeUseCaseInterface::class,
+            \App\UseCases\PostAuthAuthorizeUseCase::class
+        );
+        $this->app->singleton(
+            \App\Contracts\UseCases\PostAuthPasswordForgotUseCaseInterface::class,
+            \App\UseCases\PostAuthPasswordForgotUseCase::class
+        );
+        $this->app->singleton(
+            \App\Contracts\UseCases\PostAuthPasswordResetUseCaseInterface::class,
+            \App\UseCases\PostAuthPasswordResetUseCase::class
+        );
+
         /* [REGISTER_USECASES] */
     }
 

@@ -1,0 +1,61 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Feature\Api\App;
+
+{{- if ne .RequestSchema nil }}
+use App\Http\Requests\Api\App\{{ .RequestSchemaName.Default.Title }};
+{{- end }}
+use App\Http\Resources\Api\App\{{ .SuccessResponse.Schema.Name.Default.Title }};
+use Illuminate\Support\Facades\Http;
+use Tests\Feature\Api\App\TestCase;
+
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends TestCase
+{
+    public function testApiExecuteActionSuccess(): void
+    {
+        Http::fake();
+
+        $token = $this->getAuthToken();
+{{- if eq .Method.Snake "get" }}
+        $response = $this->get(
+            '/api/app{{ .Path }}',
+            [
+                'Authorization' => 'bearer '.$token,
+            ]
+        );
+{{- else if eq .Method.Snake "delete" }}
+        $response = $this->delete(
+            '/api/app{{ .Path }}',
+            [
+{{- if ne .RequestSchema nil }}
+{{- range .RequestSchema.Properties}}
+{{- if eq .Required false }}
+        '{{ .Name.Default.Title }}' => '',
+{{- end }}
+{{- end }}
+{{- end }}
+            ],
+            [
+                'Authorization' => 'bearer '.$token,
+            ]
+        );
+{{- else }}
+        $response = $this->{{ .Method.Snake }}Json(
+            '/api/app/{{ .Path }}',
+            [
+            ],
+            [
+                'Authorization' => 'bearer '.$token,
+            ]
+        );
+{{- end }}
+        $response->assertStatus({{ .SuccessResponse.StatusCode }});
+    }
+}

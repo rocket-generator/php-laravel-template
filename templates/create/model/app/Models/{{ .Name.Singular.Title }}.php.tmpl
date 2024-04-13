@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Models;
+
+{{- if eq .PrimaryKeyDataType "uuid" }}
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+{{- end }}
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+{{- if .UseSoftDelete }}
+use Illuminate\Database\Eloquent\SoftDeletes;
+{{- end }}
+
+class {{ .Name.Singular.Title }} extends Base
+{
+    use HasFactory;
+{{- if eq .PrimaryKeyDataType "uuid" }}
+    use HasUuids;
+{{- end }}
+{{- if .UseSoftDelete }}
+    use SoftDeletes;
+{{- end }}
+
+    protected $table = '{{ .Name.Original }}';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+{{- range .Columns}}
+{{- if not .Primary }}
+{{- if not .IsSystemUseColumn }}
+        '{{ .Name.Original }}',
+{{- end }}
+{{- end }}
+{{- end }}
+    ];
+
+{{- if eq .PrimaryKeyDataType "uuid" }}
+    protected $casts = [
+        'id' => 'string',
+    ];
+{{- end }}
+
+    protected $primaryKey = "{{ .PrimaryKeyName }}";
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+    ];
+
+{{- range .Relations}}
+{{- if eq .Type "belongsTo"}}
+    public function {{ .Name.Singular.Snake }}()
+    {
+        return $this->belongsTo({{ .Entity.Name.Singular.Title }}::class,
+            '{{ .ForeignKey.Original }}',
+            '{{ .OwnerKey.Original }}'
+        );
+    }
+{{- end}}
+{{- if eq .Type "belongsToMany"}}
+    public function {{ .Name.Plural.Title }}()
+    {
+        return $this->belongsToMany({{ .Model }}, '{{ .Table.Name.Original }}', '{{ .ForeignKey.Name.Original }}', '{{ .OtherKey.Name.Original }}');
+    }
+{{- end}}
+{{- if eq .Type "hasMany"}}
+    public function {{ .Name.Plural.Title }}()
+    {
+        return $this->hasMany({{ .Model }}, '{{ .ForeignKey.Name.Original }}', '{{ .PrimaryKey.Name.Original }}');
+    }
+{{- end}}
+{{- if eq .Type "hasOne"}}
+    public function {{ .Name.Singular.Title }}()
+    {
+        return $this->hasOne({{ .Model }}, '{{ .ForeignKey.Name.Original }}', '{{ .PrimaryKey.Name.Original }}');
+    }
+{{- end}}
+{{- end }}
+}

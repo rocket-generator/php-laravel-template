@@ -147,9 +147,12 @@ class BaseRepository implements BaseRepositoryInterface
         return $model->where('is_enabled', '=', true)->count();
     }
 
-    public function firstByFilter($filter): Model|Base|null
+    public function firstByFilter(array $filter, string|array|null $order = null, string|array|null $direction = null): Model|Base|null
     {
         $query = $this->buildQueryByFilter($this->getBaseQuery(), $filter);
+        if (! empty($order) && ! empty($direction)) {
+            $query = $this->buildOrder($query, $filter, $order, $direction);
+        }
 
         return $query->first();
     }

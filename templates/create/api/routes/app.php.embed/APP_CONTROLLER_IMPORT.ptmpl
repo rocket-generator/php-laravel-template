@@ -1,0 +1,1 @@
+use App\Http\Controllers\Api\App\{{ .PathName.Default.Title }}{{ .Method.Title }}Controller;

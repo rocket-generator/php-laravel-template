@@ -9,7 +9,7 @@ use Tests\Feature\Api\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected string $loginAPIPath = '/api/app/auth/registration';
+    protected string $loginAPIPath = '/api/app/auth/authorize';
 
     protected string $userID = '';
 
@@ -34,6 +34,8 @@ abstract class TestCase extends BaseTestCase
             // Additional Headers
         ]);
 
-        return $response->json('uiid');
+        $token = $response->json('token');
+
+        return $token ?? '';
     }
 }

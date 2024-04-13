@@ -14,7 +14,6 @@ use App\Http\Requests\Api\App\Request;
 use App\Http\Requests\Api\App\{{ .RequestSchemaName.Default.Title }};
 {{- end }}
 use App\Http\Resources\Api\App\{{ .SuccessResponse.Schema.Name.Default.Title }};
-use App\Http\Resources\Api\App\Status;
 
 class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Controller
 {

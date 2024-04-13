@@ -60,7 +60,7 @@ interface BaseRepositoryInterface
 
     public function countEnabled(): int;
 
-    public function firstByFilter(array $filter): Model|Base|null;
+    public function firstByFilter(array $filter, string|array|null $order = null, string|array|null $direction = null): Model|Base|null;
 
     public function updateByFilter(array $filter, array $values): int;
 

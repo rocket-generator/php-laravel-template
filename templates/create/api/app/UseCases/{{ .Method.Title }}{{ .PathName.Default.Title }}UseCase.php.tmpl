@@ -1,0 +1,81 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\UseCases;
+
+use App\Contracts\UseCases\{{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface;
+use App\Contracts\Services\{{ .PathName.Singular.Title }}ServiceInterface;
+use App\Exceptions\Services\ClientSideException;
+use App\Exceptions\Services\ExternalServiceException;
+use App\Exceptions\Services\ServerSideException;
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
+use App\Dto\CollectionWithCount;
+{{- else if eq .RequestSubType "get" }}
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- else if eq .RequestSubType "create" }}
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- else if eq .RequestSubType "update" }}
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- end }}
+{{- end }}
+
+class {{ .Method.Title }}{{ .PathName.Default.Title }}UseCase extends BaseUseCase implements {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface
+{
+{{- if ne .TargetModel nil }}
+    protected {{ .TargetModel.Singular.Title }}ServiceInterface ${{ .TargetModel.Singular.Camel }}Service;
+
+    public function __construct(
+        {{ .TargetModel.Singular.Title }}ServiceInterface  ${{ .TargetModel.Singular.Camel }}Service
+    ) {
+        $this->{{ .TargetModel.Singular.Camel }}Service = ${{ .TargetModel.Singular.Camel }}Service;
+    }
+{{- else }}
+    public function __construct(
+    ) {
+    }
+{{- end }}
+
+    /**
+     * @throws ClientSideException
+     * @throws ExternalServiceException
+     * @throws ServerSideException
+     */
+{{- if and (eq .RequestType "crud") (ne .TargetModel nil) }}
+{{- if eq .RequestSubType "index" }}
+    public function handle(int $offset, int $limit, string $order, string $direction, array $filter = []): CollectionWithCount {
+        ${{ .TargetModel.Plural.Camel }} = $this->{{ .TargetModel.Singular.Camel }}Service->get{{ .TargetModel.Singular.Title }}($offset, $limit, $order, $direction, $filter);
+        $count = $this->{{ .TargetModel.Singular.Camel }}Service->count{{ .TargetModel.Singular.Title }}($filter);
+
+        return new CollectionWithCount(${{ .TargetModel.Plural.Camel }}, $count);
+    }
+{{- else if eq .RequestSubType "get" }}
+    public function handle(string $id): ?{{ .SuccessResponse.Schema.Name.Singular.Title }} {
+        ${{ .TargetModel.Plural.Camel }} = $this->{{ .TargetModel.Singular.Camel }}Service->find{{ .TargetModel.Plural.Title }}ById($id);
+        if (empty(${{ .TargetModel.Plural.Camel }})) {
+            throw new ClientSideException('{{ .TargetModel.Plural.Title }} not found', 404);
+        }
+
+        return ${{ .TargetModel.Plural.Camel }};
+    }
+{{- else if eq .RequestSubType "create" }}
+    public function handle(array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }} {
+        return $this->{{ .TargetModel.Singular.Camel }}Service->create{{ .TargetModel.Plural.Title }}($data);
+    }
+{{- else if eq .RequestSubType "update" }}
+    public function handle(string $id, array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }} {
+        return $this->{{ .TargetModel.Singular.Camel }}Service->update{{ .TargetModel.Plural.Title }}($id, $data);
+    }
+{{- else if eq .RequestSubType "delete" }}
+    public function handle(string $id): bool {
+        return $this->{{ .TargetModel.Singular.Camel }}Service->delete($id);
+    }
+{{- end }}
+{{- else }}
+    public function handle(): bool {
+        // [TODO] Need to implement this use case
+        return true;
+    }
+{{- end }}
+}

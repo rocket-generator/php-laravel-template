@@ -1,0 +1,4 @@
+        $this->app->singleton(
+            \App\Contracts\Repositories\{{ .Name.Singular.Title }}RepositoryInterface::class,
+            \App\Repositories\{{ .Name.Singular.Title }}Repository::class
+        );

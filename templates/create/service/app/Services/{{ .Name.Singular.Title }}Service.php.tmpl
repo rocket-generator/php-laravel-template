@@ -4,15 +4,28 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+{{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
 use App\Contracts\Repositories\{{ .Singular.Title }}RepositoryInterface;
-{{- end}}
+{{- end }}
+
+{{- range .RelatedModels}}
+use App\Dto\{{ .Singular.Title }};
+{{- end }}
+{{- end }}
+
 use App\Contracts\Services\{{ .Name.Singular.Title }}ServiceInterface;
+use App\Exceptions\Services\ClientSideException;
+use Illuminate\Support\Facades\DB;
 
-
+{{- if .IsAuthService }}
+class {{ .Name.Singular.Title }}Service extends AuthenticatableService implements {{ .Name.Singular.Title }}ServiceInterface
+{{- else }}
 class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.Singular.Title }}ServiceInterface
+{{- end }}
 {
 
+{{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
     protected {{ .Singular.Title }}RepositoryInterface ${{ .Singular.Camel }}Repository;
 {{- end}}
@@ -26,4 +39,102 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
         $this->{{ .Singular.Camel }}Repository = ${{ .Singular.Camel }}Repository;
 {{- end}}
     }
+{{- else }}
+    public function __construct(
+    ) {
+    }
+{{- end }}
+
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+    // CRUD methods for {{ .Singular.Title }} model
+
+    public function find{{ .Singular.Title }}ById(string $id): ?{{ .Singular.Title }}
+    {
+        $model = $this->{{ .Singular.Camel }}Repository->findById($id);
+        return {{ .Singular.Title }}::createFromModel($model);
+    }
+
+    /**
+     * @return {{ .Singular.Title }}[]
+     */
+    public function get{{ .Plural.Title }}(int $offset, int $limit, string $order, string $direction, ?array $filter = null): array
+    {
+        $models = $this->{{ .Singular.Camel }}Repository->getByFilter(
+            $filter,
+            $order,
+            $direction,
+            $offset,
+            $limit,
+        );
+        $result = [];
+        foreach ($models as $model) {
+            $result[] = {{ .Singular.Title }}::createFromModel($model);
+        }
+
+        return $result;
+    }
+
+    public function count{{ .Plural.Title }}(?array $filter = null): int
+    {
+        return $this->{{ .Singular.Camel }}Repository->countByFilter($filter);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function create{{ .Singular.Title }}(array $data): ?{{ .Singular.Title }}
+    {
+        try {
+            DB::beginTransaction();
+            $model = $this->{{ .Singular.Camel }}Repository->create($data);
+            DB::commit();
+        } catch (Throwable $ex) {
+            DB::rollback();
+            throw $ex;
+        }
+
+        return $this->find{{ .Singular.Title }}ById($model->id);
+    }
+
+    public function update{{ .Singular.Title }}(string $id, array $data): ?{{ .Singular.Title }}
+    {
+        $model = $this->{{ .Singular.Camel }}Repository->find($id);
+        if (empty($model)) {
+            throw new ClientSideException('{{ .Singular.Title }} not found', 404);
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->{{ .Singular.Camel }}Repository->update($model, $data);
+            DB::commit();
+        } catch (Throwable $ex) {
+            DB::rollback();
+            throw $ex;
+        }
+
+        return $this->find{{ .Singular.Title }}ById($model->id);
+    }
+
+    public function delete{{ .Singular.Title }}(string $id): bool
+    {
+        $model = $this->{{ .Singular.Camel }}Repository->find($id);
+        if (empty($model)) {
+            throw new ClientSideException('{{ .Singular.Title }} not found', 404);
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->{{ .Singular.Camel }}Repository->delete($model);
+            DB::commit();
+        } catch (Throwable $ex) {
+            DB::rollback();
+            throw $ex;
+        }
+
+        return true;
+    }
+
+{{- end }}
+{{- end }}
 }

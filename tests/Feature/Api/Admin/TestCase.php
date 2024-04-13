@@ -24,4 +24,14 @@ abstract class TestCase extends BaseTestCase
         $admin = AdminUser::factory()->create($this->adminCredential);
         $this->loginCredential = $this->adminCredential;
     }
+
+    protected function getAuthHeaders(): array
+    {
+        $response = $this->postJson($this->loginAPIPath, $this->loginCredential);
+        $token = $response->json('token');
+
+        return [
+            'Authorization' => "Bearer $token",
+        ];
+    }
 }

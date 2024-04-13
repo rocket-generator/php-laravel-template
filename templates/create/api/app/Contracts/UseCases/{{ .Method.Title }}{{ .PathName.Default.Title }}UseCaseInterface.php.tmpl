@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Contracts\UseCases;
+
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
+use App\Dto\CollectionWithCount;
+{{- else if eq .RequestSubType "get" }}
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- else if eq .RequestSubType "post" }}
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- else if eq .RequestSubType "update" }}
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- end }}
+{{- end }}
+
+interface {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface extends BaseUseCaseInterface
+{
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
+    public function handle(int $offset, int $limit, string $order, string $direction, array $filter = []): CollectionWithCount;
+{{- else if eq .RequestSubType "get" }}
+    public function handle(string $id): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- else if eq .RequestSubType "post" }}
+    public function handle(array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- else if eq .RequestSubType "update" }}
+    public function handle(string $id, array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
+{{- else if eq .Method.Camel "delete" }}
+    public function handle(string $id): bool;
+{{- end }}
+{{- else }}
+    public function handle(): bool;
+{{- end }}
+}

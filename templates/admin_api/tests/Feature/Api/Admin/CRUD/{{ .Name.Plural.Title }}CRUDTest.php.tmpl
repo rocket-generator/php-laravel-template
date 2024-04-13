@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Api\Admin\CRUD\{{ .Name.Plural.Title }};
+namespace Tests\Feature\Api\Admin\CRUD;
 
 use App\Models\{{ .Name.Singular.Title }};
 use Tests\Feature\Api\Admin\TestCase;
@@ -12,7 +12,7 @@ use Tests\Feature\Api\Admin\TestCase;
  *
  * @coversNothing
  */
-final class {{ .Name.Singular.Title }}CRUDTest extends TestCase
+final class {{ .Name.Plural.Title }}CRUDTest extends TestCase
 {
     public function testApiGet{{ .Name.Plural.Title }}Successfully(): void
     {

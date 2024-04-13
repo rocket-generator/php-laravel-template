@@ -8,12 +8,12 @@ readonly class {{ .Name.Singular.Title }}
 {
 
 {{- range .RelatedResponse.Schema.Properties}}
-    public {{ .Type }} ${{ .Name.Default.Camel }};
+    public {{ .CodeType }} ${{ .Name.Default.Camel }};
 {{- end}}
 
     public function __construct(
 {{- range .RelatedResponse.Schema.Properties}}
-        {{ .Type }} ${{ .Name.Default.Camel }},
+        {{ .CodeType }} ${{ .Name.Default.Camel }},
 {{- end}}
     ) {
 {{- range .RelatedResponse.Schema.Properties}}
