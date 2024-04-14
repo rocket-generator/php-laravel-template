@@ -17,6 +17,7 @@ use App\Dto\{{ .Singular.Title }};
 use App\Contracts\Services\{{ .Name.Singular.Title }}ServiceInterface;
 use App\Exceptions\Services\ClientSideException;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 {{- if .IsAuthService }}
 class {{ .Name.Singular.Title }}Service extends AuthenticatableService implements {{ .Name.Singular.Title }}ServiceInterface
@@ -35,6 +36,13 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
         {{ .Singular.Title }}RepositoryInterface ${{ .Singular.Camel }}Repository,
 {{- end}}
     ) {
+{{- if .IsAuthService }}
+        parent::__construct(
+{{- range .RelatedModels}}
+            ${{ .Singular.Camel }}Repository,
+{{- end}}
+        );
+{{- end}}
 {{- range .RelatedModels}}
         $this->{{ .Singular.Camel }}Repository = ${{ .Singular.Camel }}Repository;
 {{- end}}
@@ -51,7 +59,7 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
 
     public function find{{ .Singular.Title }}ById(string $id): ?{{ .Singular.Title }}
     {
-        $model = $this->{{ .Singular.Camel }}Repository->findById($id);
+        $model = $this->{{ .Singular.Camel }}Repository->find($id);
         return {{ .Singular.Title }}::createFromModel($model);
     }
 
@@ -97,6 +105,10 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
         return $this->find{{ .Singular.Title }}ById($model->id);
     }
 
+    /**
+     * @throws ClientSideException
+     * @throws Throwable
+     */
     public function update{{ .Singular.Title }}(string $id, array $data): ?{{ .Singular.Title }}
     {
         $model = $this->{{ .Singular.Camel }}Repository->find($id);
@@ -116,6 +128,10 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
         return $this->find{{ .Singular.Title }}ById($model->id);
     }
 
+    /**
+     * @throws ClientSideException
+     * @throws Throwable
+     */
     public function delete{{ .Singular.Title }}(string $id): bool
     {
         $model = $this->{{ .Singular.Camel }}Repository->find($id);
@@ -136,5 +152,11 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
     }
 
 {{- end }}
+{{- end }}
+{{- if .IsAuthService }}
+    public function getGuardName(): string
+    {
+        return 'app';
+    }
 {{- end }}
 }

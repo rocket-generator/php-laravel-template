@@ -9,7 +9,7 @@ use Tests\Feature\Api\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected string $loginAPIPath = '/api/admin/auth/login';
+    protected string $loginAPIPath = '/api/admin/auth/authorize';
 
     protected string $userID = '';
 
@@ -23,15 +23,16 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         $admin = AdminUser::factory()->create($this->adminCredential);
         $this->loginCredential = $this->adminCredential;
+        $this->userId = $admin->id;
     }
 
     protected function getAuthHeaders(): array
     {
         $response = $this->postJson($this->loginAPIPath, $this->loginCredential);
-        $token = $response->json('token');
+        $token = $response->json('access_token');
 
         return [
-            'Authorization' => "Bearer $token",
+            'Authorization' => "bearer $token",
         ];
     }
 }

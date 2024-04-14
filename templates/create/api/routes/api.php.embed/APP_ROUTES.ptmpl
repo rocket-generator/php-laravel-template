@@ -1,0 +1,1 @@
+    $router->{{ .Method.Camel }}('{{ .Path }}', [{{ .PathName.Default.Title }}{{ .Method.Title }}Controller::class, '__invoke']){{ if .RequireAuth }}->middleware('auth:app'){{ end }}->name('{{ .PathName.Default.Snake }}.{{ .Method.Snake }}');

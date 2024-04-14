@@ -1,6 +1,7 @@
 <?php
 
 /* [APP_CONTROLLER_IMPORT] */
+/* [ADMIN_CONTROLLER_IMPORT] */
 
 use App\Http\Controllers\Api\App\AuthAuthorizePostController;
 use App\Http\Controllers\Api\App\AuthPasswordForgotPostController;
@@ -24,15 +25,6 @@ Route::group([
     'as' => 'app.',
 ], function ($router): void {
 
-    /* [APP_ROUTES] */
-
-});
-
-Route::group([
-    'prefix' => 'admin',
-    'as' => 'admin.',
-], function ($router): void {
-
     $router->group([
         'prefix' => 'auth',
         'as' => 'auth.',
@@ -47,6 +39,22 @@ Route::group([
         });
     });
 
+    /* [APP_ROUTES] */
+
+});
+
+Route::group([
+    'prefix' => 'admin',
+    'as' => 'admin.',
+], function ($router): void {
+
+    $router->group([
+        'prefix' => 'auth',
+        'as' => 'auth.',
+    ], function ($router): void {
+        $router->post('authorize', [\App\Http\Controllers\Api\Admin\AuthController::class, 'auth'])->name('authorize');
+    });
+
     Route::group([
         'middleware' => ['middleware' => 'auth:admin'],
     ], function ($router): void {
@@ -55,11 +63,4 @@ Route::group([
         /* [ADMIN_ROUTES] */
     });
 
-    Route::group([
-        'middleware' => ['middleware' => 'auth:app'],
-    ], function ($router): void {
-        Route::apiResource('admin_users', \App\Http\Controllers\Api\Admin\AdminUsersController::class);
-
-        /* [APP_ROUTES] */
-    });
 });

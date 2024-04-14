@@ -9,7 +9,7 @@ use App\Models\Base;
 use App\Models\{{ .Name.Singular.Title }};
 use Illuminate\Database\Query\Builder;
 
-class {{ .Name.Singular.Title }}Repository extends SingleKeyModelRepository implements {{ .Name.Singular.Title }}RepositoryInterface
+class {{ .Name.Singular.Title }}Repository extends {{ if .Authenticatable }}AuthenticatableRepository{{ else }}SingleKeyModelRepository{{ end }} implements {{ .Name.Singular.Title }}RepositoryInterface
 {
     public function getBlankModel(): Base|Builder
     {

@@ -23,7 +23,7 @@ final class {{ .Name.Plural.Title }}CRUDTest extends TestCase
 
     public function testApiGet{{ .Name.Singular.Title }}Successfully(): void
     {
-        $model = {{ .Name.Singular.Title }}::first();
+        $model = {{ .Name.Singular.Title }}::factory()->create();
 
         $headers = $this->getAuthHeaders();
         $response = $this->get("/api/admin/{{ .Name.Plural.Snake }}/{$model->id}", $headers);
@@ -41,7 +41,7 @@ final class {{ .Name.Plural.Title }}CRUDTest extends TestCase
 
     public function testApiUpdate{{ .Name.Singular.Title }}Successfully(): void
     {
-        $model = {{ .Name.Singular.Title }}::first();
+        $model = {{ .Name.Singular.Title }}::factory()->create();
         $newData = fake()->name;
 
         $headers = $this->getAuthHeaders();

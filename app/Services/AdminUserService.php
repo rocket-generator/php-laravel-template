@@ -21,6 +21,9 @@ class AdminUserService extends AuthenticatableService implements AdminUserServic
     public function __construct(
         AdminUserRepositoryInterface $adminUserRepository
     ) {
+        parent::__construct(
+            $adminUserRepository,
+        );
         $this->authenticatableRepository = $adminUserRepository;
     }
 

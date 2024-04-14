@@ -9,8 +9,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 {{- if .UseSoftDelete }}
 use Illuminate\Database\Eloquent\SoftDeletes;
 {{- end }}
+{{- if .Authenticatable }}
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+{{- end }}
 
+{{- if .Authenticatable }}
+class {{ .Name.Singular.Title }} extends AuthenticatableBase implements JWTSubject
+{{- else }}
 class {{ .Name.Singular.Title }} extends Base
+{{- end }}
 {
     use HasFactory;
 {{- if eq .PrimaryKeyDataType "uuid" }}
@@ -52,6 +59,24 @@ class {{ .Name.Singular.Title }} extends Base
      */
     protected $hidden = [
     ];
+
+{{- if .Authenticatable }}
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     */
+    public function getJWTIdentifier(): mixed
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     */
+    public function getJWTCustomClaims(): array
+    {
+        return [];
+    }
+{{- end }}
 
 {{- range .Relations}}
 {{- if eq .Type "belongsTo"}}

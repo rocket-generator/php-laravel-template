@@ -23,6 +23,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         $user = User::factory()->create($this->userCredential);
         $this->loginCredential = $this->userCredential;
+        $this->userID = $user->id;
     }
 
     protected function getAuthToken(?array $credential = null): string
@@ -34,7 +35,7 @@ abstract class TestCase extends BaseTestCase
             // Additional Headers
         ]);
 
-        $token = $response->json('token');
+        $token = $response->json('access_token');
 
         return $token ?? '';
     }

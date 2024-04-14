@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\UseCases;
 
 use App\Contracts\UseCases\{{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface;
-use App\Contracts\Services\{{ .PathName.Singular.Title }}ServiceInterface;
+{{- if ne .TargetModel nil }}
+use App\Contracts\Services\{{ .TargetModel.Singular.Title }}ServiceInterface;
+{{- end }}
 use App\Exceptions\Services\ClientSideException;
 use App\Exceptions\Services\ExternalServiceException;
 use App\Exceptions\Services\ServerSideException;
@@ -45,14 +47,14 @@ class {{ .Method.Title }}{{ .PathName.Default.Title }}UseCase extends BaseUseCas
 {{- if and (eq .RequestType "crud") (ne .TargetModel nil) }}
 {{- if eq .RequestSubType "index" }}
     public function handle(int $offset, int $limit, string $order, string $direction, array $filter = []): CollectionWithCount {
-        ${{ .TargetModel.Plural.Camel }} = $this->{{ .TargetModel.Singular.Camel }}Service->get{{ .TargetModel.Singular.Title }}($offset, $limit, $order, $direction, $filter);
-        $count = $this->{{ .TargetModel.Singular.Camel }}Service->count{{ .TargetModel.Singular.Title }}($filter);
+        ${{ .TargetModel.Plural.Camel }} = $this->{{ .TargetModel.Singular.Camel }}Service->get{{ .TargetModel.Plural.Title }}($offset, $limit, $order, $direction, $filter);
+        $count = $this->{{ .TargetModel.Singular.Camel }}Service->count{{ .TargetModel.Plural.Title }}($filter);
 
         return new CollectionWithCount(${{ .TargetModel.Plural.Camel }}, $count);
     }
 {{- else if eq .RequestSubType "get" }}
     public function handle(string $id): ?{{ .SuccessResponse.Schema.Name.Singular.Title }} {
-        ${{ .TargetModel.Plural.Camel }} = $this->{{ .TargetModel.Singular.Camel }}Service->find{{ .TargetModel.Plural.Title }}ById($id);
+        ${{ .TargetModel.Plural.Camel }} = $this->{{ .TargetModel.Singular.Camel }}Service->find{{ .TargetModel.Singular.Title }}ById($id);
         if (empty(${{ .TargetModel.Plural.Camel }})) {
             throw new ClientSideException('{{ .TargetModel.Plural.Title }} not found', 404);
         }
@@ -61,15 +63,15 @@ class {{ .Method.Title }}{{ .PathName.Default.Title }}UseCase extends BaseUseCas
     }
 {{- else if eq .RequestSubType "create" }}
     public function handle(array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }} {
-        return $this->{{ .TargetModel.Singular.Camel }}Service->create{{ .TargetModel.Plural.Title }}($data);
+        return $this->{{ .TargetModel.Singular.Camel }}Service->create{{ .TargetModel.Singular.Title }}($data);
     }
 {{- else if eq .RequestSubType "update" }}
     public function handle(string $id, array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }} {
-        return $this->{{ .TargetModel.Singular.Camel }}Service->update{{ .TargetModel.Plural.Title }}($id, $data);
+        return $this->{{ .TargetModel.Singular.Camel }}Service->update{{ .TargetModel.Singular.Title }}($id, $data);
     }
 {{- else if eq .RequestSubType "delete" }}
     public function handle(string $id): bool {
-        return $this->{{ .TargetModel.Singular.Camel }}Service->delete($id);
+        return $this->{{ .TargetModel.Singular.Camel }}Service->delete{{ .TargetModel.Singular.Title }}($id);
     }
 {{- end }}
 {{- else }}

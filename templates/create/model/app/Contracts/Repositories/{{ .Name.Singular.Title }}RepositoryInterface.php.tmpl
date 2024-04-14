@@ -22,7 +22,7 @@ use Illuminate\Database\Query\Builder;
  * @method \App\Models\{{ .Name.Singular.Title }}[]|array|\Traversable getByFilter($filter, $order = null, $direction = null, $offset = null, $limit = null);
  * @method \App\Models\{{ .Name.Singular.Title }}[]|array|\Traversable allByFilter($filter, $order = null, $direction = null);
  */
-interface {{ .Name.Singular.Title }}RepositoryInterface extends SingleKeyModelRepositoryInterface
+interface {{ .Name.Singular.Title }}RepositoryInterface extends {{ if .Authenticatable }}AuthenticatableRepositoryInterface{{ else }}SingleKeyModelRepositoryInterface{{ end }}
 {
     public function getBlankModel(): Base|Builder;
 }

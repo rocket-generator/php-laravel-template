@@ -23,34 +23,62 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
         Http::fake();
 
         $token = $this->getAuthToken();
-{{- if eq .Method.Snake "get" }}
+
+{{- if ne .TargetModel nil }}
+        /** @var \App\Models\{{ .TargetModel.Singular.Title }} $model */
+        $model = \App\Models\{{ .TargetModel.Singular.Title }}::factory()->create();
+{{- end }}
+
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
         $response = $this->get(
-            '/api/app{{ .Path }}',
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'),
             [
                 'Authorization' => 'bearer '.$token,
             ]
         );
-{{- else if eq .Method.Snake "delete" }}
-        $response = $this->delete(
-            '/api/app{{ .Path }}',
+{{- else if eq .RequestSubType "get" }}
+        $response = $this->get(
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', ['id' => $model->id]),
             [
-{{- if ne .RequestSchema nil }}
-{{- range .RequestSchema.Properties}}
-{{- if eq .Required false }}
-        '{{ .Name.Default.Title }}' => '',
-{{- end }}
-{{- end }}
-{{- end }}
+                'Authorization' => 'bearer '.$token,
+            ]
+        );
+{{- else if eq .RequestSubType "create" }}
+        $data = \App\Models\{{ .TargetModel.Singular.Title }}::factory()->make();
+        $response = $this->postJson(
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', ['id' => $model->id]),
+            $data->toArray(),
+            [
+                'Authorization' => 'bearer '.$token,
+            ]
+        );
+{{- else if eq .RequestSubType "update" }}
+        $data = \App\Models\{{ .TargetModel.Singular.Title }}::factory()->make();
+        $response = $this->putJson(
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', ['id' => $model->id]),
+            $data->toArray(),
+            [
+                'Authorization' => 'bearer '.$token,
+            ]
+        );
+{{- else if eq .RequestSubType "delete" }}
+        $response = $this->delete(
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', ['id' => $model->id]),
+            [
             ],
             [
                 'Authorization' => 'bearer '.$token,
             ]
         );
+{{- end }}
 {{- else }}
         $response = $this->{{ .Method.Snake }}Json(
-            '/api/app/{{ .Path }}',
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'),
+{{- if ne .Method.Snake "get" }}
             [
             ],
+{{- end }}
             [
                 'Authorization' => 'bearer '.$token,
             ]
