@@ -24,22 +24,45 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
 
         $token = $this->getAuthToken();
 
+{{- if gt (len .AncestorModels) 0 }}
+{{- range .AncestorModels }}
+        /** @var \App\Models\{{ .Name.Singular.Title }} ${{ .Name.Singular.Camel }}Model */
+        ${{ .Name.Singular.Camel }}Model = \App\Models\{{ .Name.Singular.Title }}::factory()->create();
+{{- end }}
+{{- end }}
+
 {{- if ne .TargetModel nil }}
         /** @var \App\Models\{{ .TargetModel.Singular.Title }} $model */
         $model = \App\Models\{{ .TargetModel.Singular.Title }}::factory()->create();
 {{- end }}
 
+
 {{- if eq .RequestType "crud" }}
 {{- if eq .RequestSubType "index" }}
         $response = $this->get(
-            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'),
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'
+{{- if gt (len .AncestorModels) 0 }}
+            , [
+{{- range .AncestorModels }}
+                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+{{- end }}
+            ]
+{{- end }}
+            ),
             [
                 'Authorization' => 'bearer '.$token,
             ]
         );
 {{- else if eq .RequestSubType "get" }}
         $response = $this->get(
-            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', ['id' => $model->id]),
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', [
+{{- if gt (len .AncestorModels) 0 }}
+{{- range .AncestorModels }}
+                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+{{- end }}
+{{- end }}
+                'id' => $model->id
+            ]),
             [
                 'Authorization' => 'bearer '.$token,
             ]
@@ -47,7 +70,15 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
 {{- else if eq .RequestSubType "create" }}
         $data = \App\Models\{{ .TargetModel.Singular.Title }}::factory()->make();
         $response = $this->postJson(
-            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', ['id' => $model->id]),
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'
+{{- if gt (len .AncestorModels) 0 }}
+            , [
+{{- range .AncestorModels }}
+                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+{{- end }}
+            ]
+{{- end }}
+            ),
             $data->toArray(),
             [
                 'Authorization' => 'bearer '.$token,
@@ -64,7 +95,15 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
         );
 {{- else if eq .RequestSubType "delete" }}
         $response = $this->delete(
-            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', ['id' => $model->id]),
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}',
+            [
+            {{- if gt (len .AncestorModels) 0 }}
+            {{- range .AncestorModels }}
+                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+            {{- end }}
+            {{- end }}
+                'id' => $model->id
+            ]),
             [
             ],
             [
@@ -74,7 +113,15 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
 {{- end }}
 {{- else }}
         $response = $this->{{ .Method.Snake }}Json(
-            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'),
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'
+{{- if gt (len .AncestorModels) 0 }}
+            , [
+{{- range .AncestorModels }}
+                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+{{- end }}
+            ]
+{{- end }}
+            ),
 {{- if ne .Method.Snake "get" }}
             [
             ],

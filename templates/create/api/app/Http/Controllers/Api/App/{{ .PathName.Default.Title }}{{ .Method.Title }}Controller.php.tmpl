@@ -48,21 +48,20 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
 
         $collection = $this->useCase->handle($offset, $limit, $order, $direction);
 
-        return new {{ .SuccessResponse.Schema.Name.Plural.Title }}($collection);
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($collection);
 {{- else if eq .RequestSubType "get" }}
         $dto = $this->useCase->handle($id);
 
-        return new {{ .SuccessResponse.Schema.Name.Singular.Title }}($dto);
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto);
 {{- else if eq .RequestSubType "create" }}
         $data = $request->validated();
         $dto = $this->useCase->handle($data);
-
-        return new {{ .SuccessResponse.Schema.Name.Singular.Title }}($dto);
+        return (new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto))->withStatus(201);
 {{- else if eq .RequestSubType "update" }}
         $data = $request->validated();
         $dto = $this->useCase->handle($id, $data);
 
-        return new {{ .SuccessResponse.Schema.Name.Singular.Title }}($dto);
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto);
 {{- else if eq .RequestSubType "delete" }}
         $status = $this->useCase->handle($id);
 

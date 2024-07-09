@@ -49,14 +49,14 @@ class BaseRepository implements BaseRepositoryInterface
         return $query->get();
     }
 
-    public function allByFilterQuery($filter, $order = null, $direction = null): Builder
+    public function allByFilterQuery($filter, $order = 'id', $direction = 'asc'): Builder
     {
         $query = $this->buildQueryByFilter($this->getBaseQuery(), $filter);
 
         return $this->buildOrder($query, $filter, $order, $direction);
     }
 
-    public function allByFilter($filter, $order = null, $direction = null): Collection|iterable
+    public function allByFilter($filter, $order = 'id', $direction = 'asc'): Collection|iterable
     {
         $query = $this->allByFilterQuery($filter, $order, $direction);
 
