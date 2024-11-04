@@ -9,12 +9,12 @@ namespace App\Contracts\UseCases;
 {{- if .SuccessResponse.IsList }}
 use App\Dto\CollectionWithCount;
 {{- else }}
-use App\Dtos\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- end }}
 {{- else if eq .Method.Camel "post" }}
-use App\Dtos\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- else if eq .Method.Camel "put" }}
-use App\Dtos\{{ .SuccessResponse.Schema.Name.Singular.Title }};
+use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- end }}
 {{- end }}
 

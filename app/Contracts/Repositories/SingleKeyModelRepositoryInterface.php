@@ -12,7 +12,7 @@ interface SingleKeyModelRepositoryInterface extends BaseRepositoryInterface
 {
     public function getPrimaryKey(): string;
 
-    public function find(string $id): Base|null|Model;
+    public function find(string $id, array $with = [], array $withCount = []): Base|null|Model;
 
     /**
      * @param  string[]  $ids
@@ -35,14 +35,8 @@ interface SingleKeyModelRepositoryInterface extends BaseRepositoryInterface
 
     public function dryUpdate(Base $model, array $input): Base;
 
-    /**
-     * @return ?Base
-     */
     public function update(Base $model, array $input): ?Base;
 
-    /**
-     * @return ?Base
-     */
     public function save(Base $model): ?Base;
 
     public function delete(Base $model): bool;

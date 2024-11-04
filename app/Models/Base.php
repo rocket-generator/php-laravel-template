@@ -19,7 +19,7 @@ class Base extends Model
 {
     public static function getTableName(): string
     {
-        return with(new static())->getTable();
+        return with(new static)->getTable();
     }
 
     /**
@@ -27,7 +27,7 @@ class Base extends Model
      */
     public static function getFillableColumns(): array
     {
-        return with(new static())->getFillable();
+        return with(new static)->getFillable();
     }
 
     /**
@@ -35,7 +35,7 @@ class Base extends Model
      */
     public static function getViewableColumns(): array
     {
-        return with(new static())->getFillable();
+        return with(new static)->getFillable();
     }
 
     /**

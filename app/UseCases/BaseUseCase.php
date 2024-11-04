@@ -6,6 +6,4 @@ namespace App\UseCases;
 
 use App\Contracts\UseCases\BaseUseCaseInterface;
 
-class BaseUseCase implements BaseUseCaseInterface
-{
-}
+class BaseUseCase implements BaseUseCaseInterface {}

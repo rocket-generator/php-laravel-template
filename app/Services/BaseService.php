@@ -6,6 +6,4 @@ namespace App\Services;
 
 use App\Contracts\Services\BaseServiceInterface;
 
-class BaseService implements BaseServiceInterface
-{
-}
+class BaseService implements BaseServiceInterface {}

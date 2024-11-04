@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Contracts\Repositories\AuthenticatableRepositoryInterface;
 use App\Contracts\Services\AuthenticatableServiceInterface;
+use App\Exceptions\Services\ClientSideException;
 use App\Models\AuthenticatableBase;
 use App\Models\Base;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -61,11 +62,11 @@ class AuthenticatableService extends BaseService implements AuthenticatableServi
         return null;
     }
 
-    public function signUp(array $input, string $uniqueKeyForTracking, string $externalBranchId, string $externalJobId, string $jobRef, string $referrer): null|AuthenticatableBase|Authenticatable
+    public function signUp(array $input): null|AuthenticatableBase|Authenticatable
     {
         $existingAuthenticatableBase = $this->authenticatableRepository->findByEmail(Arr::get($input, 'email'));
         if (! empty($existingAuthenticatableBase)) {
-            return null;
+            throw new ClientSideException('Email already exists', 400);
         }
 
         $user = $this->create($input);

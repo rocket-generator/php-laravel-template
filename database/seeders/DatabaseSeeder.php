@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
 
     protected array $environments = [
         'testing' => [],
-        'local' => [AdminUserSeeder::class],
+        'local' => [TestUserSeeder::class],
         'development' => [],
         'production' => [],
     ];

@@ -16,7 +16,7 @@ interface AuthenticatableServiceInterface extends BaseServiceInterface
 
     public function getToken(): ?string;
 
-    public function signUp(array $input, string $uniqueKeyForTracking, string $branchId, string $externalJobId, string $jobRef, string $referrer): null|AuthenticatableBase|Authenticatable;
+    public function signUp(array $input): null|AuthenticatableBase|Authenticatable;
 
     public function signOut(): bool;
 

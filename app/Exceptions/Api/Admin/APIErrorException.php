@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Exceptions\Api\Admin;
 
-use App\Http\Resources\Api\Admin\Status;
+use App\Http\Resources\Api\Status;
 
 class APIErrorException extends \App\Exceptions\Api\APIErrorException
 {

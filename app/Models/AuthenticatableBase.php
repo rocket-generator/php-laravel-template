@@ -25,6 +25,9 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|AuthenticatableBase newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AuthenticatableBase query()
  *
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ *
  * @mixin \Eloquent
  */
 class AuthenticatableBase extends Base implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
@@ -36,8 +39,6 @@ class AuthenticatableBase extends Base implements AuthenticatableContract, Autho
     use Notifiable;
 
     /**
-     * @param  ?string  $password
-     *
      * @throws BindingResolutionException
      */
     public function setPasswordAttribute(?string $password): void

@@ -64,7 +64,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->renderable(function (Throwable $e) {
-            if( $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
                 return \App\Http\Resources\Api\Status::error('endpoint not found', 404);
             }
             if ($e instanceof \Illuminate\Validation\ValidationException) {

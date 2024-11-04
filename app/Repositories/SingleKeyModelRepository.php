@@ -45,7 +45,7 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
         throw new \BadMethodCallException("Call to undefined method {$className}::{$method}()");
     }
 
-    public function find(string $id): Base|null|Model
+    public function find(string $id, array $with = [], array $withCount = []): Base|null|Model
     {
         $query = $this->getBaseQuery();
         if ($this->cacheEnabled) {
@@ -59,6 +59,12 @@ class SingleKeyModelRepository extends BaseRepository implements SingleKeyModelR
             });
         } else {
             $query = $query->where($this->getPrimaryKey(), $id);
+            if (count($with) > 0) {
+                $query = $query->with($with);
+            }
+            if (count($withCount) > 0) {
+                $query = $query->withCount($withCount);
+            }
             $query = $this->queryOptions($query);
 
             return $query->first();

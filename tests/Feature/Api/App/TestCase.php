@@ -9,7 +9,7 @@ use Tests\Feature\Api\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected string $loginAPIPath = '/api/app/auth/authorize';
+    protected string $loginAPIPath = '/api/auth/signin';
 
     protected string $userID = '';
 

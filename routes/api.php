@@ -3,9 +3,12 @@
 /* [APP_CONTROLLER_IMPORT] */
 /* [ADMIN_CONTROLLER_IMPORT] */
 
-use App\Http\Controllers\Api\App\AuthAuthorizePostController;
-use App\Http\Controllers\Api\App\AuthPasswordForgotPostController;
-use App\Http\Controllers\Api\App\AuthPasswordResetPostController;
+use App\Http\Controllers\Api\Auth\MeGetController;
+use App\Http\Controllers\Api\Auth\MePutController;
+use App\Http\Controllers\Api\Auth\PasswordForgotPostController;
+use App\Http\Controllers\Api\Auth\PasswordResetPostController;
+use App\Http\Controllers\Api\Auth\SignInPostController;
+use App\Http\Controllers\Api\Auth\SignUpPostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,47 +23,49 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group([
+    'prefix' => 'auth',
+    'namespace' => 'auth',
+    'as' => 'auth.',
+], function ($router): void {
+    $router->post('signin', [SignInPostController::class, '__invoke'])->name('signin');
+    $router->post('signup', [SignUpPostController::class, '__invoke'])->name('signup');
+    $router->group([
+        'prefix' => 'password',
+        'as' => 'password.',
+    ], function ($router): void {
+        $router->post('forgot', [PasswordForgotPostController::class, '__invoke'])->name('forgot');
+        $router->post('reset', [PasswordResetPostController::class, '__invoke'])->name('reset');
+    });
+});
+
+Route::group([
+    'middleware' => ['middleware' => 'auth:app'],
+    'as' => 'me.',
+], function ($router): void {
+    $router->get('me', [MeGetController::class, '__invoke'])->name('get');
+    $router->match(['PUT', 'PATCH'], 'me', [MePutController::class, '__invoke'])->name('update');
+});
+
+Route::group([
     'prefix' => 'app',
     'namespace' => 'app',
     'as' => 'app.',
 ], function ($router): void {
-
-    $router->group([
-        'prefix' => 'auth',
-        'as' => 'auth.',
+    Route::group([
+        'middleware' => ['middleware' => 'auth:app'],
     ], function ($router): void {
-        $router->post('authorize', [AuthAuthorizePostController::class, '__invoke'])->name('authorize');
-        $router->group([
-            'prefix' => 'password',
-            'as' => 'password.',
-        ], function ($router): void {
-            $router->post('forgot', [AuthPasswordForgotPostController::class, '__invoke'])->name('forgot');
-            $router->post('reset', [AuthPasswordResetPostController::class, '__invoke'])->name('reset');
-        });
+        /* [APP_ROUTES] */
     });
-
-    /* [APP_ROUTES] */
-
 });
 
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
 ], function ($router): void {
-
-    $router->group([
-        'prefix' => 'auth',
-        'as' => 'auth.',
-    ], function ($router): void {
-        $router->post('authorize', [\App\Http\Controllers\Api\Admin\AuthController::class, 'auth'])->name('authorize');
-    });
-
     Route::group([
-        'middleware' => ['middleware' => 'auth:admin'],
+        'middleware' => ['middleware' => 'auth:app'],
     ], function ($router): void {
-        Route::apiResource('admin_users', \App\Http\Controllers\Api\Admin\AdminUsersController::class);
-
+        Route::apiResource('users', \App\Http\Controllers\Api\Admin\UsersController::class);
         /* [ADMIN_ROUTES] */
     });
-
 });

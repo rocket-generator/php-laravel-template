@@ -6,6 +6,4 @@ namespace App\Http\Requests\Api\Admin;
 
 use App\Http\Requests\Api\JsonRequest as BaseRequest;
 
-class Request extends BaseRequest
-{
-}
+class Request extends BaseRequest {}

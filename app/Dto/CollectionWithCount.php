@@ -20,6 +20,6 @@ class CollectionWithCount
 
     public static function empty(): self
     {
-        return new self(new Collection(), 0);
+        return new self(new Collection, 0);
     }
 }

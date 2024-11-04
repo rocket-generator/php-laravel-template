@@ -14,8 +14,8 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(
-            \App\Contracts\Repositories\AdminUserRepositoryInterface::class,
-            \App\Repositories\AdminUserRepository::class
+            \App\Contracts\Repositories\UserRepositoryInterface::class,
+            \App\Repositories\UserRepository::class
         );
 
         /* [REGISTER_REPOSITORIES] */
@@ -24,7 +24,5 @@ class RepositoryServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-    }
+    public function boot(): void {}
 }

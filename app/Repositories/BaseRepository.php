@@ -24,7 +24,7 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function getEmptyList(): Collection|iterable
     {
-        return new Collection();
+        return new Collection;
     }
 
     public function rules(): array
@@ -72,7 +72,7 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function getBlankModel(): Base|Builder
     {
-        return new Base();
+        return new Base;
     }
 
     public function getBaseQuery(): Base|Builder
@@ -161,7 +161,13 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $query = $this->buildQueryByFilter($this->getBaseQuery(), $filter);
 
-        return $query->update($values);
+        $result = $query->update($values);
+
+        if ($result) {
+            return $result;
+        }
+
+        return 0;
     }
 
     public function getSQLByFilter($filter): string
@@ -257,7 +263,7 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
-     * @param  int[]  $ids
+     * @param  string[]  $ids
      */
     protected function getCacheKey(array $ids): string
     {

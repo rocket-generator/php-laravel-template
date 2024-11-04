@@ -14,8 +14,8 @@ class ServiceServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(
-            \App\Contracts\Services\AdminUserServiceInterface::class,
-            \App\Services\AdminUserService::class
+            \App\Contracts\Services\UserServiceInterface::class,
+            \App\Services\UserService::class
         );
 
         /* [REGISTER_SERVICES] */
@@ -24,7 +24,5 @@ class ServiceServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-    }
+    public function boot(): void {}
 }

@@ -14,8 +14,12 @@ class UseCaseServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(
-            \App\Contracts\UseCases\PostAuthAuthorizeUseCaseInterface::class,
-            \App\UseCases\PostAuthAuthorizeUseCase::class
+            \App\Contracts\UseCases\PostAuthSignInUseCaseInterface::class,
+            \App\UseCases\PostAuthSignInUseCase::class
+        );
+        $this->app->singleton(
+            \App\Contracts\UseCases\PostAuthSignUpUseCaseInterface::class,
+            \App\UseCases\PostAuthSignUpUseCase::class
         );
         $this->app->singleton(
             \App\Contracts\UseCases\PostAuthPasswordForgotUseCaseInterface::class,
@@ -25,6 +29,14 @@ class UseCaseServiceProvider extends ServiceProvider
             \App\Contracts\UseCases\PostAuthPasswordResetUseCaseInterface::class,
             \App\UseCases\PostAuthPasswordResetUseCase::class
         );
+        $this->app->singleton(
+            \App\Contracts\UseCases\GetMeUseCaseInterface::class,
+            \App\UseCases\GetMeUseCase::class
+        );
+        $this->app->singleton(
+            \App\Contracts\UseCases\PutMeUseCaseInterface::class,
+            \App\UseCases\PutMeUseCase::class
+        );
 
         /* [REGISTER_USECASES] */
     }
@@ -32,7 +44,5 @@ class UseCaseServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-    }
+    public function boot(): void {}
 }

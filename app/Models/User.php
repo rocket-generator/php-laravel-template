@@ -8,25 +8,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
- * App\Models\AdminUser
- *
  * @property string $id
  * @property string $name
  * @property string $email
- * @property mixed $password
+ * @property string $password
+ * @property array $permissions
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
  *
- * @method static \Database\Factories\AdminUserFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser query()
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AdminUser whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePermissions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  *
  * @mixin Eloquent
  */
@@ -44,6 +45,7 @@ class User extends AuthenticatableBase implements JWTSubject
         'name',
         'email',
         'password',
+        'permissions',
     ];
 
     /**
@@ -63,6 +65,7 @@ class User extends AuthenticatableBase implements JWTSubject
     protected $casts = [
         'id' => 'string',
         'password' => 'hashed',
+        'permissions' => 'array',
     ];
 
     protected $primaryKey = 'id';
