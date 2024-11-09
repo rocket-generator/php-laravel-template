@@ -10,7 +10,7 @@ use App\Http\Requests\Api\Admin\Request;
 use App\Http\Requests\Api\Admin\ResourceUpdate;
 use App\Http\Resources\Api\Admin\Resource;
 use App\Http\Resources\Api\Admin\Resources;
-use App\Http\Resources\Api\Admin\Status;
+use App\Http\Resources\Api\Status;
 
 class ResourceController extends BaseController
 {
@@ -18,19 +18,18 @@ class ResourceController extends BaseController
 
     public function index(Request $request): Resources
     {
-        $offset = (int) $request->query('_start', '0');
-        $end = (int) $request->query('_end', '100');
-        $limit = $end - $offset;
+        $offset = (int) $request->query('offset', '0');
+        $limit = (int) $request->query('limit', '100');
 
-        $directionString = $request->query('_order', 'asc');
+        $directionString = $request->query('direction', 'asc');
         $directions = explode(',', $directionString);
-        $orderString = $request->query('_sort', 'id');
-        $orders = explode(',', $orderString);
+        $orderString = $request->query('order', 'id');
+        $orders = explode(',', string: $orderString);
 
-        $filter = $request->query('_filter', '');
+        $query = $request->query('query', '');
         $filterArray = [];
-        if ($filter !== '') {
-            $filterArray = ['query' => $filter];
+        if ($query !== '') {
+            $filterArray = ['query' => $query];
         }
 
         foreach ($directions as $index => $direction) {

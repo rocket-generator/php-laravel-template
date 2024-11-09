@@ -10,6 +10,7 @@ use App\Dto\AccessToken;
 use App\Exceptions\Services\ClientSideException;
 use App\Exceptions\Services\ExternalServiceException;
 use App\Exceptions\Services\ServerSideException;
+use App\Models\User;
 
 class PostAuthSignInUseCase extends BaseUseCase implements PostAuthSignInUseCaseInterface
 {
@@ -28,12 +29,15 @@ class PostAuthSignInUseCase extends BaseUseCase implements PostAuthSignInUseCase
      */
     public function handle(string $email, string $password): AccessToken
     {
+        /**
+         * @var User|null $user
+         */
         $user = $this->userService->signIn($email, $password);
         if (empty($user)) {
             throw new ClientSideException('Invalid email or password', 401);
         }
         $token = $this->userService->getToken();
 
-        return new AccessToken($token, config('jwt.ttl', 60) * 60, 'bearer');
+        return new AccessToken($token, config('jwt.ttl', 60) * 60, 'bearer', $user->permissions ?? []);
     }
 }

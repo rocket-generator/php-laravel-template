@@ -37,7 +37,7 @@ class AccessToken extends Resource
             'access_token' => $this->resource->accessToken,
             'token_type' => $this->resource->tokenType,
             'expires_in' => $this->resource->expiresIn,
-            'permissions' => $user->permissions,
+            'permissions' => $user->permissions ?? [],
         ];
 
         return $result;

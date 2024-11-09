@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->jsonb('permissions')->default('[]');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

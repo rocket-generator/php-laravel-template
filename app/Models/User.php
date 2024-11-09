@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
@@ -35,6 +36,7 @@ class User extends AuthenticatableBase implements JWTSubject
 {
     use HasFactory;
     use HasUuids;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
