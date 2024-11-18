@@ -39,7 +39,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['middleware' => 'auth:app'],
+    'middleware' => ['auth:app'],
     'as' => 'me.',
 ], function ($router): void {
     $router->get('me', [MeGetController::class, '__invoke'])->name('get');
@@ -52,7 +52,7 @@ Route::group([
     'as' => 'app.',
 ], function ($router): void {
     Route::group([
-        'middleware' => ['middleware' => 'auth:app'],
+        'middleware' => ['auth:app'],
     ], function ($router): void {
         /* [APP_ROUTES] */
     });
@@ -63,7 +63,7 @@ Route::group([
     'as' => 'admin.',
 ], function ($router): void {
     Route::group([
-        'middleware' => ['middleware' => 'auth:app'],
+        'middleware' => ['auth:app', 'permission:admin'],
     ], function ($router): void {
         Route::apiResource('users', \App\Http\Controllers\Api\Admin\UsersController::class);
         /* [ADMIN_ROUTES] */

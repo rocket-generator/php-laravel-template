@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class Resources extends BaseResource
 {
     protected array $columns = [
-        'resources' => [],
+        'data' => [],
         'count' => 0,
     ];
 
@@ -26,7 +26,7 @@ class Resources extends BaseResource
         }
 
         return [
-            'resources' => $resources,
+            'data' => $resources,
             'count' => $this->resource['count'],
         ];
     }
