@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Http;
  */
 final class SignInPostAPITest extends TestCase
 {
-    public function testApiExecuteActionSuccess(): void
+    public function test_api_execute_action_success(): void
     {
         Http::fake();
 

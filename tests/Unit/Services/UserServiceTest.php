@@ -20,7 +20,7 @@ final class UserServiceTest extends TestCase
      *
      * @throws BindingResolutionException
      */
-    public function testCreateUserServiceInstanceSuccessfully(): void
+    public function test_create_user_service_instance_successfully(): void
     {
         $service = app()->make(UserServiceInterface::class);
         self::assertNotNull($service);

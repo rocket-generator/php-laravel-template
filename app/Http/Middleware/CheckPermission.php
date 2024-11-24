@@ -6,7 +6,6 @@ use App\Http\Resources\Api\Status;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
 
 class CheckPermission
 {
@@ -21,6 +20,7 @@ class CheckPermission
         if ($user && empty(array_diff($permissions, $user->permissions))) {
             return $next($request);
         }
+
         return Status::error('You do not have permission to access this page.', 403)->toResponse($request);
     }
 }

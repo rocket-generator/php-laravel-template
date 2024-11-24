@@ -20,7 +20,7 @@ final class PostAuthPasswordForgotUseCaseTest extends TestCase
      *
      * @throws BindingResolutionException
      */
-    public function testCreateGetMeUseCaseInstanceSuccessfully(): void
+    public function test_create_get_me_use_case_instance_successfully(): void
     {
         $useCase = app()->make(PostAuthPasswordForgotUseCaseInterface::class);
         self::assertNotNull($useCase);

@@ -19,13 +19,13 @@ final class UserTest extends TestCase
     /**
      * Test User create.
      */
-    public function testCreateUserModelSuccessfully(): void
+    public function test_create_user_model_successfully(): void
     {
         $user = new User;
         self::assertNotNull($user);
     }
 
-    public function testCreateNewUserAndStoreItSuccessfully(): void
+    public function test_create_new_user_and_store_it_successfully(): void
     {
         $model = new User;
 

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Http;
  */
 final class MePutAPITest extends TestCase
 {
-    public function testApiExecuteActionSuccess(): void
+    public function test_api_execute_action_success(): void
     {
         Http::fake();
 
@@ -32,7 +32,7 @@ final class MePutAPITest extends TestCase
         $this->assertEquals($newName, $response->json('name'));
     }
 
-    public function testApiExecuteActionUpdatePassword(): void
+    public function test_api_execute_action_update_password(): void
     {
         Http::fake();
 
@@ -65,7 +65,7 @@ final class MePutAPITest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testApiExecuteActionUpdatePasswordWithBlankSuccess(): void
+    public function test_api_execute_action_update_password_with_blank_success(): void
     {
         Http::fake();
 

@@ -20,7 +20,7 @@ final class UserRepositoryTest extends TestCase
      *
      * @throws BindingResolutionException
      */
-    public function testCreateUserRepositoryInstanceSuccessfully(): void
+    public function test_create_user_repository_instance_successfully(): void
     {
         $repository = app()->make(UserRepositoryInterface::class);
         self::assertNotNull($repository);

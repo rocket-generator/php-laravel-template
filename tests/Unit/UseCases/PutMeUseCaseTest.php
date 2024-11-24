@@ -20,7 +20,7 @@ final class PutMeUseCaseTest extends TestCase
      *
      * @throws BindingResolutionException
      */
-    public function testCreatePutMeUseCaseInstanceSuccessfully(): void
+    public function test_create_put_me_use_case_instance_successfully(): void
     {
         $useCase = app()->make(PutMeUseCaseInterface::class);
         self::assertNotNull($useCase);

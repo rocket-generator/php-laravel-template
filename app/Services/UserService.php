@@ -40,12 +40,14 @@ class UserService extends AuthenticatableService implements UserServiceInterface
          * @var User $user
          */
         $user = auth()->user();
+
         return UserDto::createFromModel($user);
     }
 
     public function getById(string $id): ?UserDto
     {
         $user = $this->authenticatableRepository->find($id);
+
         return UserDto::createFromModel($user);
     }
 
