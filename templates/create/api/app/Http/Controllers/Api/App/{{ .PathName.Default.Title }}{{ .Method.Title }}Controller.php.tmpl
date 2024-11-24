@@ -41,12 +41,21 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
     {
 {{- if eq .RequestType "crud" }}
 {{- if eq .RequestSubType "index" }}
-        $offset = (int) $request->query('offset', 0);
-        $limit = (int) $request->query('limit', 20);
-        $order = $request->query('order', 'created_at');
+        $offset = (int) $request->query('offset', "0");
+        $limit = (int) $request->query('limit', "10");
+        $order = $request->query('order', '__default__');
         $direction = $request->query('direction', 'asc');
+        if ($order == '__default__') {
+            $order = 'created_at';
+            $direction = 'desc';
+        }
 
-        $collection = $this->useCase->handle($offset, $limit, $order, $direction);
+        $filter = $request->only([
+            'id',
+            'query',
+        ]);
+
+        $collection = $this->useCase->handle($offset, $limit, $order, $direction, $filter);
 
         return new {{ .SuccessResponse.Schema.Name.Default.Title }}($collection);
 {{- else if eq .RequestSubType "get" }}

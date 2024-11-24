@@ -34,9 +34,19 @@ class UserService extends AuthenticatableService implements UserServiceInterface
         return '';
     }
 
-    public function getById(string $id): ?User
+    public function getAuthUser(): UserDto
     {
-        return $this->authenticatableRepository->find($id);
+        /**
+         * @var User $user
+         */
+        $user = auth()->user();
+        return UserDto::createFromModel($user);
+    }
+
+    public function getById(string $id): ?UserDto
+    {
+        $user = $this->authenticatableRepository->find($id);
+        return UserDto::createFromModel($user);
     }
 
     public function sendPasswordResetEmail(string $email): ?string

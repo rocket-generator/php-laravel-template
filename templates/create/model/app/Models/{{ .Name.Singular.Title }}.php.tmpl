@@ -79,8 +79,8 @@ class {{ .Name.Singular.Title }} extends Base
 {{- end }}
 
 {{- range .Relations}}
-{{- if eq .Type "belongsTo"}}
-    public function {{ .Name.Singular.Snake }}()
+{{- if eq .RelationType "belongsTo"}}
+    public function {{ .Name.Singular.Camel }}()
     {
         return $this->belongsTo({{ .Entity.Name.Singular.Title }}::class,
             '{{ .ForeignKey.Original }}',
@@ -88,22 +88,22 @@ class {{ .Name.Singular.Title }} extends Base
         );
     }
 {{- end}}
-{{- if eq .Type "belongsToMany"}}
-    public function {{ .Name.Plural.Title }}()
+{{- if eq .RelationType "belongsToMany"}}
+    public function {{ .Name.Plural.Camel }}()
     {
-        return $this->belongsToMany({{ .Model }}, '{{ .Table.Name.Original }}', '{{ .ForeignKey.Name.Original }}', '{{ .OtherKey.Name.Original }}');
+        return $this->belongsToMany({{ .Entity.Name.Singular.Title }}::class, '{{ .OwnerKey.Original }}', '{{ .ForeignKey.Original }}', '??RELATION_TABLE??');
     }
 {{- end}}
-{{- if eq .Type "hasMany"}}
-    public function {{ .Name.Plural.Title }}()
+{{- if eq .RelationType "hasMany"}}
+    public function {{ .Name.Plural.Camel }}()
     {
-        return $this->hasMany({{ .Model }}, '{{ .ForeignKey.Name.Original }}', '{{ .PrimaryKey.Name.Original }}');
+        return $this->hasMany({{ .Entity.Name.Singular.Title }}::class, '{{ .ForeignKey.Original }}', '{{ .OwnerKey.Original }}');
     }
 {{- end}}
-{{- if eq .Type "hasOne"}}
-    public function {{ .Name.Singular.Title }}()
+{{- if eq .RelationType "hasOne"}}
+    public function {{ .Name.Singular.Camel }}()
     {
-        return $this->hasOne({{ .Model }}, '{{ .ForeignKey.Name.Original }}', '{{ .PrimaryKey.Name.Original }}');
+        return $this->hasOne({{ .Entity.Name.Singular.Title }}::class, '{{ .ForeignKey.Original }}', '{{ .OwnerKey.Original }}');
     }
 {{- end}}
 {{- end }}

@@ -6,11 +6,13 @@ namespace App\Services;
 
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
-use App\Contracts\Repositories\{{ .Singular.Title }}RepositoryInterface;
+use App\Contracts\Repositories\{{ .Name.Singular.Title }}RepositoryInterface;
 {{- end }}
 
 {{- range .RelatedModels}}
-use App\Dto\{{ .Singular.Title }};
+{{- if .IsCRUDModel }}
+use App\Dto\{{ .Name.Singular.Title }};
+{{- end }}
 {{- end }}
 {{- end }}
 
@@ -28,23 +30,23 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
 
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
-    protected {{ .Singular.Title }}RepositoryInterface ${{ .Singular.Camel }}Repository;
+    protected {{ .Name.Singular.Title }}RepositoryInterface ${{ .Name.Singular.Camel }}Repository;
 {{- end}}
 
     public function __construct(
 {{- range .RelatedModels}}
-        {{ .Singular.Title }}RepositoryInterface ${{ .Singular.Camel }}Repository,
+        {{ .Name.Singular.Title }}RepositoryInterface ${{ .Name.Singular.Camel }}Repository,
 {{- end}}
     ) {
 {{- if .IsAuthService }}
         parent::__construct(
 {{- range .RelatedModels}}
-            ${{ .Singular.Camel }}Repository,
+            ${{ .Name.Singular.Camel }}Repository,
 {{- end}}
         );
 {{- end}}
 {{- range .RelatedModels}}
-        $this->{{ .Singular.Camel }}Repository = ${{ .Singular.Camel }}Repository;
+        $this->{{ .Name.Singular.Camel }}Repository = ${{ .Name.Singular.Camel }}Repository;
 {{- end}}
     }
 {{- else }}
@@ -55,20 +57,21 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
 
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
-    // CRUD methods for {{ .Singular.Title }} model
+{{- if .IsCRUDModel }}
+    // CRUD methods for {{ .Name.Singular.Title }} model
 
-    public function find{{ .Singular.Title }}ById(string $id): ?{{ .Singular.Title }}
+    public function find{{ .Name.Singular.Title }}ById(string $id): ?{{ .Name.Singular.Title }}
     {
-        $model = $this->{{ .Singular.Camel }}Repository->find($id);
-        return {{ .Singular.Title }}::createFromModel($model);
+        $model = $this->{{ .Name.Singular.Camel }}Repository->find($id);
+        return {{ .Name.Singular.Title }}::createFromModel($model);
     }
 
     /**
-     * @return {{ .Singular.Title }}[]
+     * @return {{ .Name.Singular.Title }}[]
      */
-    public function get{{ .Plural.Title }}(int $offset, int $limit, string $order, string $direction, ?array $filter = null): array
+    public function get{{ .Name.Plural.Title }}(int $offset, int $limit, string $order, string $direction, ?array $filter = null): array
     {
-        $models = $this->{{ .Singular.Camel }}Repository->getByFilter(
+        $models = $this->{{ .Name.Singular.Camel }}Repository->getByFilter(
             $filter,
             $order,
             $direction,
@@ -77,71 +80,71 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
         );
         $result = [];
         foreach ($models as $model) {
-            $result[] = {{ .Singular.Title }}::createFromModel($model);
+            $result[] = {{ .Name.Singular.Title }}::createFromModel($model);
         }
 
         return $result;
     }
 
-    public function count{{ .Plural.Title }}(?array $filter = null): int
+    public function count{{ .Name.Plural.Title }}(?array $filter = null): int
     {
-        return $this->{{ .Singular.Camel }}Repository->countByFilter($filter);
+        return $this->{{ .Name.Singular.Camel }}Repository->countByFilter($filter);
     }
 
     /**
      * @throws Throwable
      */
-    public function create{{ .Singular.Title }}(array $data): ?{{ .Singular.Title }}
+    public function create{{ .Name.Singular.Title }}(array $data): ?{{ .Name.Singular.Title }}
     {
         try {
             DB::beginTransaction();
-            $model = $this->{{ .Singular.Camel }}Repository->create($data);
+            $model = $this->{{ .Name.Singular.Camel }}Repository->create($data);
             DB::commit();
         } catch (Throwable $ex) {
             DB::rollback();
             throw $ex;
         }
 
-        return $this->find{{ .Singular.Title }}ById($model->id);
+        return $this->find{{ .Name.Singular.Title }}ById($model->id);
     }
 
     /**
      * @throws ClientSideException
      * @throws Throwable
      */
-    public function update{{ .Singular.Title }}(string $id, array $data): ?{{ .Singular.Title }}
+    public function update{{ .Name.Singular.Title }}(string $id, array $data): ?{{ .Name.Singular.Title }}
     {
-        $model = $this->{{ .Singular.Camel }}Repository->find($id);
+        $model = $this->{{ .Name.Singular.Camel }}Repository->find($id);
         if (empty($model)) {
-            throw new ClientSideException('{{ .Singular.Title }} not found', 404);
+            throw new ClientSideException('{{ .Name.Singular.Title }} not found', 404);
         }
 
         try {
             DB::beginTransaction();
-            $model = $this->{{ .Singular.Camel }}Repository->update($model, $data);
+            $model = $this->{{ .Name.Singular.Camel }}Repository->update($model, $data);
             DB::commit();
         } catch (Throwable $ex) {
             DB::rollback();
             throw $ex;
         }
 
-        return $this->find{{ .Singular.Title }}ById($model->id);
+        return $this->find{{ .Name.Singular.Title }}ById($model->id);
     }
 
     /**
      * @throws ClientSideException
      * @throws Throwable
      */
-    public function delete{{ .Singular.Title }}(string $id): bool
+    public function delete{{ .Name.Singular.Title }}(string $id): bool
     {
-        $model = $this->{{ .Singular.Camel }}Repository->find($id);
+        $model = $this->{{ .Name.Singular.Camel }}Repository->find($id);
         if (empty($model)) {
-            throw new ClientSideException('{{ .Singular.Title }} not found', 404);
+            throw new ClientSideException('{{ .Name.Singular.Title }} not found', 404);
         }
 
         try {
             DB::beginTransaction();
-            $model = $this->{{ .Singular.Camel }}Repository->delete($model);
+            $model = $this->{{ .Name.Singular.Camel }}Repository->delete($model);
             DB::commit();
         } catch (Throwable $ex) {
             DB::rollback();
@@ -151,6 +154,7 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
         return true;
     }
 
+{{- end }}
 {{- end }}
 {{- end }}
 {{- if .IsAuthService }}

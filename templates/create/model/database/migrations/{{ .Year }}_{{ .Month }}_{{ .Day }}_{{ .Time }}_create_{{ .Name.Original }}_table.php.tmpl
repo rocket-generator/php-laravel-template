@@ -20,7 +20,7 @@ return new class extends Migration
             $table->{{ .ObjectType }}('{{ .Name.Original }}')->primary();
 {{- end }}
 {{- else }}
-            $table->{{ .ObjectType }}('{{ .Name.Original }}'){{ if .Nullable }}->nullable(){{ end }}{{ if ne .DefaultValue "" }}->default("{{ .DefaultValue }}"){{ else if eq .ObjectType "string" }}->default(""){{ else if eq .ObjectType "integer" }}->default(0){{ else if eq .ObjectType "boolean" }}->default(false){{ end }};
+            $table->{{ .ObjectType }}('{{ .Name.Original }}'){{ if .Nullable }}->nullable(){{ end }}{{ if ne .DefaultValue "" }}->default("{{ .DefaultValue }}"){{ else if eq .ObjectType "string" }}->default(""){{ else if eq .ObjectType "integer" }}->default(0){{ else if eq .ObjectType "boolean" }}->default(false){{ end }}{{ if .IsForeignKey }}->index(){{  end }};
 {{- end }}
 {{- end }}
             $table->timestamps();

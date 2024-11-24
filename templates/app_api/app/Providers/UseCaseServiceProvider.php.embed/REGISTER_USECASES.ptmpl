@@ -1,6 +1,0 @@
-{{- range .Requests}}
-        $this->app->singleton(
-            \App\Contracts\UseCases\{{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface::class,
-            \App\UseCases\{{ .Method.Title }}{{ .PathName.Default.Title }}UseCase::class
-        );
-{{- end}}

@@ -47,7 +47,6 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'app',
     'namespace' => 'app',
     'as' => 'app.',
 ], function ($router): void {
