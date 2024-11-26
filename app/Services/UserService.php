@@ -97,7 +97,6 @@ class UserService extends AuthenticatableService implements UserServiceInterface
         return $this->authenticatableRepository->countByFilter($filter);
     }
 
-
     public function createUser(array $data): UserDto
     {
         $user = $this->authenticatableRepository->create($data);
@@ -111,6 +110,7 @@ class UserService extends AuthenticatableService implements UserServiceInterface
         if (empty($user)) {
             throw new ClientSideException('User not found', 404);
         }
+
         return $this->authenticatableRepository->delete($user);
     }
 }

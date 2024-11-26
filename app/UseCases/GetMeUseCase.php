@@ -10,7 +10,6 @@ use App\Dto\User as UserDto;
 use App\Exceptions\Services\ClientSideException;
 use App\Exceptions\Services\ExternalServiceException;
 use App\Exceptions\Services\ServerSideException;
-use App\Models\User as User;
 
 class GetMeUseCase extends BaseUseCase implements GetMeUseCaseInterface
 {
