@@ -44,7 +44,7 @@ class UserService extends AuthenticatableService implements UserServiceInterface
         return UserDto::createFromModel($user);
     }
 
-    public function getById(string $id): ?UserDto
+    public function findUserById(string $id): ?UserDto
     {
         $user = $this->authenticatableRepository->find($id);
 
@@ -61,7 +61,7 @@ class UserService extends AuthenticatableService implements UserServiceInterface
         return false;
     }
 
-    public function update(string $id, array $data): UserDto
+    public function updateUser(string $id, array $data): UserDto
     {
         if (array_key_exists('password', $data) && empty($data['password'])) {
             unset($data['password']);
@@ -73,5 +73,44 @@ class UserService extends AuthenticatableService implements UserServiceInterface
         $user = $this->authenticatableRepository->update($user, $data);
 
         return UserDto::createFromModel($user);
+    }
+
+    public function getUsers(int $offset, int $limit, string $order, string $direction, array $filter = []): array
+    {
+        $models = $this->authenticatableRepository->getByFilter(
+            $filter,
+            $order,
+            $direction,
+            $offset,
+            $limit,
+        );
+        $result = [];
+        foreach ($models as $model) {
+            $result[] = UserDto::createFromModel($model);
+        }
+
+        return $result;
+    }
+
+    public function countUsers(?array $filter = null): int
+    {
+        return $this->authenticatableRepository->countByFilter($filter);
+    }
+
+
+    public function createUser(array $data): UserDto
+    {
+        $user = $this->authenticatableRepository->create($data);
+
+        return UserDto::createFromModel($user);
+    }
+
+    public function deleteUser(string $id): bool
+    {
+        $user = $this->authenticatableRepository->find($id);
+        if (empty($user)) {
+            throw new ClientSideException('User not found', 404);
+        }
+        return $this->authenticatableRepository->delete($user);
     }
 }

@@ -29,11 +29,6 @@ class GetMeUseCase extends BaseUseCase implements GetMeUseCaseInterface
      */
     public function handle(): UserDto
     {
-        /**
-         * @var User $user
-         */
-        $user = auth()->user();
-
-        return UserDto::createFromModel($user);
+        return $this->userService->getAuthUser();
     }
 }

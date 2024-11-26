@@ -32,8 +32,8 @@ class PutMeUseCase extends BaseUseCase implements PutMeUseCaseInterface
         /**
          * @var User $user
          */
-        $user = auth()->user();
-        $user = $this->userService->update($user->id, $data);
+        $user = $this->userService->getAuthUser();
+        $user = $this->userService->updateUser($user->id, $data);
 
         return $user;
     }

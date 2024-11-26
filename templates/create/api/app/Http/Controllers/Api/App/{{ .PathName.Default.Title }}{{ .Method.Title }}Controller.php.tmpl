@@ -12,7 +12,11 @@ use App\Http\Requests\Api\App\Request;
 {{- else }}
 use App\Http\Requests\Api\App\{{ .RequestSchemaName.Default.Title }};
 {{- end }}
+{{- if .HasStatusResponse }}
+use App\Http\Resources\Api\Status;
+{{- else }}
 use App\Http\Resources\Api\App\{{ .SuccessResponse.Schema.Name.Default.Title }};
+{{- end }}
 
 class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Controller
 {
@@ -29,7 +33,7 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
     public function __invoke(
 {{- range .Parameters }}
 {{- if eq .In "path" }}
-        {{ .ObjectType }} ${{ .Name.Default.Camel }},
+        string ${{ .Name.Default.Camel }},
 {{- end }}
 {{- end }}
 {{- if eq .RequestSchemaName.Default.Title "" }}
@@ -39,6 +43,38 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
 {{- end }}
     ): {{ .SuccessResponse.Schema.Name.Default.Title }}
     {
+
+        // [TODO]: Implement
+        /*
+        ## Objective of this API
+
+        {{ .Description }}
+        
+        {{- if eq .RequestType "crud" }}
+        {{- if eq .RequestSubType "index" }}
+        This API provides a paginated list of {{ .SuccessResponse.Schema.Name.Plural.Title }}. This is CRUD index API.
+        {{- else if eq .RequestSubType "get" }}
+        This API provides a {{ .SuccessResponse.Schema.Name.Singular.Title }} by specifying the `id`. This is CRUD get API.
+        {{- else if eq .RequestSubType "create" }}
+        This API creates a {{ .SuccessResponse.Schema.Name.Singular.Title }} object by specifying the data. This is CRUD create API.
+        {{- else if eq .RequestSubType "update" }}
+        This API update a {{ .SuccessResponse.Schema.Name.Singular.Title }} by specifying the `id` and the data. This is CRUD update API.
+        {{- else if eq .Method.Camel "delete" }}
+        This API deletes a {{ .SuccessResponse.Schema.Name.Singular.Title }} by specifying the `id`. This is CRUD delete API.
+        {{- end }}
+        {{- end }}
+        
+        ## Related files
+        
+        - `app/Http/Controllers/Api/App/{{ .PathName.Default.Title }}{{ .Method.Title }}Controller.php`
+        - `app/UseCases/{{ .Method.Title }}{{ .PathName.Default.Title }}UseCase.php`
+        - `app/Contracts/UseCases/{{ .Method.Title }}{{ .PathName.Default.Title }}InterfaceUseCase.php`
+        {{- range .Services }}
+        - `app/Services/{{ . }}Service.php`
+        - `app/Contracts/Services/{{ . }}ServiceInterface.php`
+        {{- end }}
+        */
+
 {{- if eq .RequestType "crud" }}
 {{- if eq .RequestSubType "index" }}
         $offset = (int) $request->query('offset', "0");
@@ -55,11 +91,23 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
             'query',
         ]);
 
-        $collection = $this->useCase->handle($offset, $limit, $order, $direction, $filter);
+        $collection = $this->useCase->handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}
+                $offset, $limit, $order, $direction, $filter);
 
         return new {{ .SuccessResponse.Schema.Name.Default.Title }}($collection);
 {{- else if eq .RequestSubType "get" }}
-        $dto = $this->useCase->handle($id);
+        $dto = $this->useCase->handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+            ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}                
+        );
 
         return new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto);
 {{- else if eq .RequestSubType "create" }}
@@ -68,21 +116,49 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
         return (new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto))->withStatus(201);
 {{- else if eq .RequestSubType "update" }}
         $data = $request->validated();
-        $dto = $this->useCase->handle($id, $data);
+        $dto = $this->useCase->handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}      
+                $data
+        );
 
         return new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto);
 {{- else if eq .RequestSubType "delete" }}
-        $status = $this->useCase->handle($id);
+        $status = $this->useCase->handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}                   
+        );
 
-        return new Status(new \App\Dto\Status(true));
+        return Status::ok('Resource successfully deleted');
 {{- end }}
 {{- else }}
-        $success = $this->useCase->handle();
+        // [TODO]: Need to update
+{{- if .HasStatusResponse }}
+        $success = $this->useCase->handle(
+{{- else }}
+        $model = $this->useCase->handle(
+{{- end }}
+        
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+         ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}   
+        );
         if (!$success) {
             throw new APIErrorException('something wrong', 400);
         }
-
-        return new {{ .SuccessResponse.Schema.Name.Default.Title }}([]);
+{{- if .HasStatusResponse }}
+        return Status::ok('Success');
+{{- else }}
+        return new {{ .SuccessResponse.Schema.Name.Default.Title }}($model);
+{{- end }}
 {{- end }}
     }
 }

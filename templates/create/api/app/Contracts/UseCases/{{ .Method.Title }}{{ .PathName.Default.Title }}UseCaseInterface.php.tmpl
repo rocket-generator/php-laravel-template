@@ -20,17 +20,47 @@ interface {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface exten
 {
 {{- if eq .RequestType "crud" }}
 {{- if eq .RequestSubType "index" }}
-    public function handle(int $offset, int $limit, string $order, string $direction, array $filter = []): CollectionWithCount;
+    public function handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+            string ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}
+            int $offset, int $limit, string $order, string $direction, array $filter = []): CollectionWithCount;
 {{- else if eq .RequestSubType "get" }}
-    public function handle(string $id): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
+    public function handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+            string ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}
+    ): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- else if eq .RequestSubType "create" }}
     public function handle(array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- else if eq .RequestSubType "update" }}
-    public function handle(string $id, array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
+    public function handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+            string ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}
+         array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- else if eq .Method.Camel "delete" }}
-    public function handle(string $id): bool;
+    public function handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+            string ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}
+    ): bool;
 {{- end }}
 {{- else }}
-    public function handle(): bool;
+    public function handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+            string ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}
+    ): bool;
 {{- end }}
 }

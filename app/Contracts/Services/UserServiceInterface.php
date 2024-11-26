@@ -10,11 +10,19 @@ interface UserServiceInterface extends AuthenticatableServiceInterface
 {
     public function getAuthUser(): UserDto;
 
-    public function getById(string $id): ?UserDto;
+    public function findUserById(string $id): ?UserDto;
 
     public function sendPasswordResetEmail(string $email): ?string;
 
     public function resetPassword(string $password, string $token): bool;
 
-    public function update(string $id, array $data): UserDto;
+    public function getUsers(int $offset, int $limit, string $order, string $direction, array $filter = []): array;
+
+    public function countUsers(?array $filter = null): int;
+
+    public function createUser(array $data): UserDto;
+
+    public function updateUser(string $id, array $data): UserDto;
+
+    public function deleteUser(string $id): bool;
 }
