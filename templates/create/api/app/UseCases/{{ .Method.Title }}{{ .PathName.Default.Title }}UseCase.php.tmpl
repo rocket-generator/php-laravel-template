@@ -22,6 +22,14 @@ use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- else if eq .RequestSubType "update" }}
 use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- end }}
+{{- else }}
+{{- if .HasStatusResponse }}
+{{- else }}
+{{- if ne .TargetModel nil }}
+use App\Dto\{{ .TargetModel.Singular.Title }};
+{{- else }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 class {{ .Method.Title }}{{ .PathName.Default.Title }}UseCase extends BaseUseCase implements {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface
@@ -142,10 +150,28 @@ class {{ .Method.Title }}{{ .PathName.Default.Title }}UseCase extends BaseUseCas
                 string ${{ .Name.Default.Camel }},
 {{- end }}
 {{- end }}
-    ): bool {
+    ): 
+{{- if .HasStatusResponse }}
+        bool
+{{- else }}
+{{- if ne .TargetModel nil }}
+        ?{{ .TargetModel.Singular.Title }}
+{{- else }}
+        bool
+{{- end }}
+{{- end }}
+    {
         $user = $this->userService->getAuthUser();
         // [TODO] Need to implement this use case
+{{- if .HasStatusResponse }}
         return true;
+{{- else }}
+{{- if ne .TargetModel nil }}
+        return new {{ .TargetModel.Singular.Title }}();
+{{- else }}
+        return true;
+{{- end }}
+{{- end }}
     }
 {{- end }}
 }

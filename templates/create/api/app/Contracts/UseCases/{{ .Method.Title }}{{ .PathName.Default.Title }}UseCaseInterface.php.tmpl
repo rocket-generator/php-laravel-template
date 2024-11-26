@@ -14,7 +14,17 @@ use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- else if eq .RequestSubType "update" }}
 use App\Dto\{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- end }}
+{{- else }}
+{{- if .HasStatusResponse }}
+{{- else }}
+{{- if ne .TargetModel nil }}
+use App\Dto\{{ .TargetModel.Singular.Title }};
+{{- else }}
 {{- end }}
+{{- end }}
+{{- end }}
+
+
 
 interface {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface extends BaseUseCaseInterface
 {
@@ -61,6 +71,16 @@ interface {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface exten
             string ${{ .Name.Default.Camel }},
 {{- end }}
 {{- end }}
-    ): bool;
+    ): 
+{{- if .HasStatusResponse }}
+    bool
+{{- else }}
+{{- if ne .TargetModel nil }}
+    ?{{ .SuccessResponse.Schema.Name.Singular.Title }}
+{{- else }}
+    bool
+{{- end }}
+{{- end }}
+    ;
 {{- end }}
 }
