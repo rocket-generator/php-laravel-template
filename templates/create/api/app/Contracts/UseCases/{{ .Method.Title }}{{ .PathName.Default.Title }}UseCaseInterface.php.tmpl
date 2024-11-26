@@ -46,7 +46,13 @@ interface {{ .Method.Title }}{{ .PathName.Default.Title }}UseCaseInterface exten
 {{- end }}
     ): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- else if eq .RequestSubType "create" }}
-    public function handle(array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
+    public function handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+            string ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}
+            array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }};
 {{- else if eq .RequestSubType "update" }}
     public function handle(
 {{- range .Parameters }}
