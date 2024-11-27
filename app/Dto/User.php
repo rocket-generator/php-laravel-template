@@ -16,6 +16,8 @@ readonly class User
 
     public ?array $permissions;
 
+    public ?string $avatarUrl;
+
     public Carbon $createdAt;
 
     public Carbon $updatedAt;
@@ -26,16 +28,18 @@ readonly class User
         string $id,
         string $email,
         string $name,
+        array $permissions,
+        ?string $avatarUrl,
         Carbon $createdAt,
         Carbon $updatedAt,
-        array $permissions,
     ) {
         $this->id = $id;
         $this->email = $email;
         $this->name = $name;
+        $this->permissions = $permissions;
+        $this->avatarUrl = $avatarUrl;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
-        $this->permissions = $permissions;
     }
 
     public static function createFromModel(
@@ -47,9 +51,10 @@ readonly class User
             id: $model->id,
             email: $model->email,
             name: $model->name,
+            permissions: $permissions,
+            avatarUrl: $model->avatar_url,
             createdAt: $model->created_at,
             updatedAt: $model->updated_at,
-            permissions: $permissions,
         );
     }
 }

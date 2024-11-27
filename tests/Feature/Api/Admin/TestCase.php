@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Admin;
 
-use App\Models\AdminUser;
+use App\Models\User;
 use Tests\Feature\Api\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected string $loginAPIPath = '/api/admin/auth/authorize';
+    protected string $loginAPIPath = '/api/auth/signin';
 
     protected string $userID = '';
 
@@ -21,7 +21,14 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = AdminUser::factory()->create($this->adminCredential);
+        $adminUserData = [
+            ...$this->adminCredential,
+            'avatar_url' => null,
+            'permissions' => [
+                'admin',
+            ],
+        ];
+        $admin = User::factory()->create($adminUserData);
         $this->loginCredential = $this->adminCredential;
         $this->userId = $admin->id;
     }

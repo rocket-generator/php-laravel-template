@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->jsonb('permissions')->default('[]');
+            $table->string('avatar_url')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

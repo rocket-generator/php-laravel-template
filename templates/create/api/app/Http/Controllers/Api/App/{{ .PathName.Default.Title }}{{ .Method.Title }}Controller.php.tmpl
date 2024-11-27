@@ -112,7 +112,14 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
         return new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto);
 {{- else if eq .RequestSubType "create" }}
         $data = $request->validated();
-        $dto = $this->useCase->handle($data);
+        $dto = $this->useCase->handle(
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                ${{ .Name.Default.Camel }},
+{{- end }}
+{{- end }}        
+                $data
+        );
         return (new {{ .SuccessResponse.Schema.Name.Default.Title }}($dto))->withStatus(201);
 {{- else if eq .RequestSubType "update" }}
         $data = $request->validated();
@@ -151,10 +158,10 @@ class {{ .PathName.Default.Title }}{{ .Method.Title }}Controller extends Control
 {{- end }}
 {{- end }}   
         );
+{{- if .HasStatusResponse }}
         if (!$success) {
             throw new APIErrorException('something wrong', 400);
         }
-{{- if .HasStatusResponse }}
         return Status::ok('Success');
 {{- else }}
         return new {{ .SuccessResponse.Schema.Name.Default.Title }}($model);

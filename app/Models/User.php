@@ -14,6 +14,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property string $email
  * @property string $password
  * @property array $permissions
+ * @property string|null $avatar_url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
@@ -28,6 +29,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePermissions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAvatarUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  *
  * @mixin Eloquent
@@ -48,6 +50,7 @@ class User extends AuthenticatableBase implements JWTSubject
         'email',
         'password',
         'permissions',
+        'avatar_url',
     ];
 
     /**

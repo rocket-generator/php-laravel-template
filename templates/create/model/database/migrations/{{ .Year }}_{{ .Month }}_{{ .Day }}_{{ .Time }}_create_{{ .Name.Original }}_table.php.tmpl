@@ -24,6 +24,24 @@ return new class extends Migration
 {{- end }}
 {{- end }}
             $table->timestamps();
+
+{{- if ne .Indexes nil }}
+{{- range .Indexes}}
+{{- if eq .IsUnique true }}
+            $table->unique([
+{{- range .Columns}}
+                '{{ . }}',
+{{- end }}
+            ]);
+{{- else }}
+            $table->index([
+{{- range .Columns}}
+                '{{ . }}',
+{{- end }}
+            ]);
+{{- end }}
+{{- end }}
+{{- end }}
         });
     }
 

@@ -105,6 +105,11 @@ class {{ .Method.Title }}{{ .PathName.Default.Title }}UseCase extends BaseUseCas
 {{- end }}
                 array $data): ?{{ .SuccessResponse.Schema.Name.Singular.Title }} {
         $user = $this->userService->getAuthUser();
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+        $data['{{ .Name.Default.Snake }}'] = ${{ .Name.Default.Camel }};
+{{- end }}
+{{- end }}
         return $this->{{ .TargetModel.Singular.Camel }}Service->create{{ .TargetModel.Singular.Title }}($data);
     }
 {{- else if eq .RequestSubType "update" }}
