@@ -26,6 +26,14 @@ class Resource extends BaseResource
      */
     public function toArray(Request $request): array|\JsonSerializable|Arrayable
     {
-        return $this->resource->toArray();
+        /**
+         * @var Base $this->resource
+         */
+        $data = $this->resource->toArray();
+        foreach ($this->resource->getBigIntegerColumns() as $column) {
+            $data[$column] = (string) $data[$column];
+        }
+
+        return $data;
     }
 }

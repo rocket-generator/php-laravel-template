@@ -39,7 +39,7 @@ class UserService extends AuthenticatableService implements UserServiceInterface
         /**
          * @var User $user
          */
-        $user = auth()->user();
+        $user = auth('app')->user();
 
         return UserDto::createFromModel($user);
     }

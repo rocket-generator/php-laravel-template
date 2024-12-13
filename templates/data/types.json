@@ -25,6 +25,27 @@
         "jsonb": "array",
         "varchar": "string",
         "bigserial": "int",
-        "serial": "int"
+        "serial": "int",
+        "decimal": "float"
+    },
+    "faker": {
+        "text": "sentence",
+        "uuid": "uuid",
+        "date": "dateTimeBetween",
+        "bool": "boolean",
+        "boolean": "boolean",
+        "uuid": "uuid",
+        "date": "date",
+        "datetime": "dateTime",
+        "json": "array",
+        "jsonb": "array",
+        "decimal": "randomFloat",
+        "numeric": "randomFloat",
+        "float": "randomFloat",
+        "double": "randomFloat",
+        "bigint": "randomNumber",
+        "int": "randomNumber",
+        "integer": "randomNumber",
+        "tinyint": "randomNumber"
     }
 }

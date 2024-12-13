@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Contracts\Repositories;
 
 use App\Models\Base;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -20,7 +21,7 @@ interface BaseRepositoryInterface
     /**
      * Get All Model's query.
      */
-    public function allByFilterQuery(array $filter, string|array|null $order = null, string|array|null $direction = null): Builder;
+    public function allByFilterQuery(array $filter, string|array|null $order = null, string|array|null $direction = null): Base|Builder|EloquentBuilder;
 
     /**
      * Get All Models.

@@ -71,7 +71,6 @@ class ResourceController extends BaseController
      */
     public function store(ResourceUpdate $request): Resource
     {
-        \Log::info('store', ['request' => $request->all()]);
         $resource = $this->repository->create($request->all());
         if (empty($resource)) {
             throw new APIErrorException('Server error has happened on creation', 500);
@@ -85,7 +84,6 @@ class ResourceController extends BaseController
      */
     public function update(ResourceUpdate $request, string $id): Resource
     {
-        \Log::info('store', ['request' => $request->all()]);
         $resource = $this->repository->find($id);
         if (empty($resource)) {
             throw new APIErrorException("Resource ID:{$id} not found", 404);

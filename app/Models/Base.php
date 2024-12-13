@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Base extends Model
 {
+    protected $bigIntegerColumns = [];
+
     public static function getTableName(): string
     {
         return with(new static)->getTable();
@@ -74,5 +76,10 @@ class Base extends Model
         }
 
         return $ret;
+    }
+
+    public function getBigIntegerColumns(): array
+    {
+        return $this->bigIntegerColumns;
     }
 }

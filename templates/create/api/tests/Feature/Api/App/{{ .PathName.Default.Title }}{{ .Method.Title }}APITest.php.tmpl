@@ -41,10 +41,12 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
 {{- if eq .RequestSubType "index" }}
         $response = $this->get(
             route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'
-{{- if gt (len .AncestorModels) 0 }}
+{{- if gt (len .Parameters) 0 }}
             , [
-{{- range .AncestorModels }}
-                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+        '{{ .Name.Original }}' => $model->{{ .Name.Default.Snake }},
+{{- end }}
 {{- end }}
             ]
 {{- end }}
@@ -56,12 +58,11 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
 {{- else if eq .RequestSubType "get" }}
         $response = $this->get(
             route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', [
-{{- if gt (len .AncestorModels) 0 }}
-{{- range .AncestorModels }}
-                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                '{{ .Name.Original }}' => $model->{{ .Name.Default.Snake }},
 {{- end }}
 {{- end }}
-                'id' => $model->id
             ]),
             [
                 'Authorization' => 'bearer '.$token,
@@ -71,10 +72,12 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
         $data = \App\Models\{{ .TargetModel.Singular.Title }}::factory()->make();
         $response = $this->postJson(
             route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'
-{{- if gt (len .AncestorModels) 0 }}
+{{- if gt (len .Parameters) 0 }}
             , [
-{{- range .AncestorModels }}
-                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                '{{ .Name.Original }}' => $model->{{ .Name.Default.Snake }},
+{{- end }}
 {{- end }}
             ]
 {{- end }}
@@ -87,7 +90,13 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
 {{- else if eq .RequestSubType "update" }}
         $data = \App\Models\{{ .TargetModel.Singular.Title }}::factory()->make();
         $response = $this->putJson(
-            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', ['id' => $model->id]),
+            route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}', [
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                '{{ .Name.Original }}' => $model->{{ .Name.Default.Snake }},
+{{- end }}
+{{- end }}
+            ]),
             $data->toArray(),
             [
                 'Authorization' => 'bearer '.$token,
@@ -97,15 +106,12 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
         $response = $this->delete(
             route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}',
             [
-            {{- if gt (len .AncestorModels) 0 }}
-            {{- range .AncestorModels }}
-                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
-            {{- end }}
-            {{- end }}
-                'id' => $model->id
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                '{{ .Name.Original }}' => $model->{{ .Name.Default.Snake }},
+{{- end }}
+{{- end }}
             ]),
-            [
-            ],
             [
                 'Authorization' => 'bearer '.$token,
             ]
@@ -114,10 +120,12 @@ final class {{ .PathName.Default.Title }}{{ .Method.Title }}APITest extends Test
 {{- else }}
         $response = $this->{{ .Method.Snake }}Json(
             route('app.{{ .PathName.Default.Snake }}.{{ .Method.Snake }}'
-{{- if gt (len .AncestorModels) 0 }}
+{{- if gt (len .Parameters) 0 }}
             , [
-{{- range .AncestorModels }}
-                '{{ .Parameter.Default.Snake }}' => ${{ .Name.Singular.Camel }}Model->{{ .Column.Default.Snake }},
+{{- range .Parameters }}
+{{- if eq .In "path" }}
+                '{{ .Name.Original }}' => $model->{{ .Name.Default.Snake }},
+{{- end }}
 {{- end }}
             ]
 {{- end }}

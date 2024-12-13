@@ -22,7 +22,8 @@ class Resources extends BaseResource
     {
         $resources = [];
         foreach ($this->resource['resources'] as $resource) {
-            $resources[] = $resource->toArray($request);
+            $object = new Resource($resource);
+            $resources[] = $object->toArray($request);
         }
 
         return [

@@ -29,6 +29,18 @@ class {{ .Name.Singular.Title }} extends Base
 
     protected $table = '{{ .Name.Original }}';
 
+    protected $bigIntegerColumns = [
+{{- range .Columns}}
+{{- if not .Primary }}
+{{- if not .IsUnixTimestamp }}
+{{- if eq .DataType.Original "bigint" }}
+        '{{ .Name.Original }}',
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -44,11 +56,19 @@ class {{ .Name.Singular.Title }} extends Base
 {{- end }}
     ];
 
-{{- if eq .PrimaryKeyDataType "uuid" }}
     protected $casts = [
+{{- if eq .PrimaryKeyDataType "uuid" }}
         'id' => 'string',
-    ];
 {{- end }}
+{{- range .Columns}}
+{{- if eq .DataType.Original "decimal" }}
+        '{{ .Name.Original }}' => 'float',
+{{- end }}
+{{- if or (eq .DataType.Original "jsonb") (eq .DataType.Original "json") }}
+        '{{ .Name.Original }}' => 'array',
+{{- end }}
+{{- end }}
+    ];
 
     protected $primaryKey = "{{ .PrimaryKeyName }}";
 

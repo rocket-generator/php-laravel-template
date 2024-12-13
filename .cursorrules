@@ -1,0 +1,133 @@
+# アプリケーションの構造
+
+## 呼び出しの構造
+
+このアプリケーションはLaravelの基本的な構造をそのまま利用するが、UseCase、Service、Repositoryという三つのレイヤが追加されている。これらのレイヤは、いわゆるオニオンアーキテクチャの概念を採用しており、一方通行でしか呼び出すことができない。
+
+Controller -> UseCase -> Service -> Repository -> Model
+
+## DI
+
+UseCase / Service / Repository はすべて、依存性注入を行う。`app/Contracts/`下にインターフェイスが定義されており、利用する際には、以下のようにコンストラクタでインターフェイスを読み込んで利用する。
+
+```php
+public function __construct(
+    UserServiceInterface $userService,
+) {
+    $this->userService = $userService;
+}
+```
+
+## Controller
+
+コントローラーは、UsersGetControllerなど、エンドポイントのパス名+メソッド名+Controllerという名称とし、一つのコントローラーに一つのエンドポイントの処理を実装する。
+
+メソッド名は `__invoke` とする。その中では、ユースケースを呼び出し、結果を取得する。
+
+Controllerには、ビジネスロジックを書いてはならない。Controllerごとにユースケースが一つ定義されているので、それを呼び出すだけにする。そのほかに、RequestデータのValidationと整形、UseCaseから帰ってきたデータからのレスポンスの生成だけを行うことができる。
+
+```php
+public function __invoke(
+    string $id,
+    Request $request
+): Anomaly {
+    $dto = $this->useCase->handle($id);
+
+    return new User($dto);
+}
+```
+
+## UseCase
+
+ユースケースは、GetUsersUseCaseなど、メソッド名+エンドポイントのパス名+UseCaseという名称とし、一つのユースケースに一つのエンドポイントの処理を実装する。ここでは具体的なビジネスロジックを記述するのではなく、複数のServiceのメソッドを呼び出し、それの組み合わせによってビジネスロジックを実装する。
+
+UseCaseには、handleというメソッドを一つだけ定義し、その中に処理を記述する。
+
+```php
+public function handle(string $userId): bool
+{
+    $user = $this->userService->findById(userId);
+    if (empty($user)) {
+        throw new ClientSideException('User not found.');
+    }
+    $success = $this->userService->deleteUser($userId);
+
+    return true;
+}
+```
+
+呼び出されるサービスの名前とメソッド名とその順番などから、処理の内容をおおよそ理解できるようにする。
+
+Repositoryを直接呼び出すことは避け、Serviceレイヤの呼び出しを複数行う構造とする。レスポンスはDto ( Data Transfer Object )やBoolean値などを利用する。レスポンスとして、型の不定なArrayなどの利用は極力避ける。
+
+## Service
+
+ビジネスロジックを実装するレイヤ。UseCaseレイヤから呼び出される。UserServiceやDocumentServiceなど、特定のリソースに関するビジネスロジックを実装する。各メソッドの名前は、処理内容をきちんと反映したものとする。
+
+単一責任原則に基づき、メソッドの粒度としては、複数の関心事をまとめて処理しないようにする。
+
+モデルを直接作成するのではなく、モデルの操作は必ずRepositoryを経由する。Serviceレイヤ空の戻り値では、Modelを直接返すことは極力避け、Dto ( Data Transfer Object )に変換する。
+
+サービスから別のサービスを呼び出すことはできない。
+
+## Dto
+
+Data Transfer Objectで`app/Dto`に格納される。Serviceからリソースを返すときには、基本はDtoに変換して返す。モデルと対応するDtoは、`createFromModel`というクラスメソッドが用意され、容易に変換することができるようにする。
+
+```php
+public function createDocument(array $data): ?\App\Dto\Document
+{
+    $model = $this->documentRepository->create($data);
+
+    return \App\Dto\Document::createFromModel($model);
+}
+```
+
+## Repository
+
+Repositoryは、UserRepository、DocumentRepositoryのように、モデルごとに定義される。Repositoryは、基本的にモデルの取得、作成、更新などの操作に限定される。ビジネスロジックは記述しない（ビジネスロジックはServiceに記述する）。BaseRepositoryというベースクラスに、ほとんどのメソッドが用意され、基本的にはモデルを定義する
+
+特殊なメソッドとして、buildQueryByFilterがあり、これによってカラム名以外の特殊なフィルタを使うことができるよう記述する。よくあるのは`query`で、これはフリーテキスト検索などに利用する。
+
+```php
+protected function buildQueryByFilter(Builder|EloquentBuilder|Base $query, array $filter, ?array $columns = null): Builder|Base|EloquentBuilder
+{
+    if (\array_key_exists('query', $filter)) {
+        $searchWord = Arr::get($filter, 'query');
+        if (! empty($searchWord)) {
+            $query = $query->where(function ($q) use ($searchWord): void {
+                $q->where('email', 'LIKE', '%'.$searchWord.'%')
+                    ->orWhere('name', 'LIKE', '%'.$searchWord.'%');
+            });
+        }
+        unset($filter['query']);
+    }
+
+    return parent::buildQueryByFilter($query, $filter);
+}
+```
+
+## Library
+
+機能によっては、Serviceに置いておくのではなく、別途切り出してライブラリとしたい機能がある。それは以下のようなものである。
+
+- 複数のサービスから呼び出される可能性のある共通処理
+- サードパーティAPIへのアクセスなどを含む処理
+
+サードパーティのAPIへのアクセスライブラリは、サードパーティのサービス名をつけてはいけない。例えば「OpenAI」や「Anthropic」の名前をつけるのではなく、LLMを使うライブラリなら`LLM`など、より抽象的な、どういう処理を行うかをもとに名前をつける。これは、将来代替サービスに切り替えるような場合を想定してのことである。したがって、メソッド名、パラメータなどもサービス名や特定のサービスのみで使われている名称はつけないようにする。
+
+## 例外処理
+
+Controller、UseCase、Serviceで処理荷問題が発生し、エラーレスポンスを返したい場合には、例外を投げる。デフォルトには三つの例外があり、基本はこれを使って例外を投げると、エラーレスポンスがクライアントに返される。
+
+| 例外                                              | 説明                                                                             |
+|:------------------------------------------------- |:-------------------------------------------------------------------------------- |
+| /app/Exceptions/Services/ClientSideException      | クライアントのリクエストに問題がある場合。ステータスコード400番台                |
+| /app/Exceptions/Services/ServerSideException      | サーバサイドに問題がある場合。ステータスコード500番台                            |
+| /app/Exceptions/Services/ExternalServiceException | サーバサイドから呼び出すサードパーティAPIに問題がある場合。ステータスコード500番 |
+
+第2引数にステータスコードを渡すことができる。
+
+```php
+throw new ClientSideException('User not found.', 404);
+```

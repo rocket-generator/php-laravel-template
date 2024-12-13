@@ -7,17 +7,42 @@ namespace App\Dto;
 readonly class {{ .Name.Singular.Title }}
 {
 
+{{- if ne .RelatedMainModel nil }}
+{{- range .RelatedMainModel.Columns }}
+{{- if not .IsSystemUseColumn }}
+    public {{ .CodeType }} ${{ .Name.Default.Camel }};
+{{- end}}
+{{- end}}
+{{- else }}
 {{- range .RelatedResponse.Schema.Properties}}
     public {{ if eq .CodeType "object" }}?{{ end }}{{ .CodeType }} ${{ .Name.Default.Camel }};
 {{- end}}
+{{- end}}
 
     public function __construct(
+{{- if ne .RelatedMainModel nil }}
+{{- range .RelatedMainModel.Columns }}
+{{- if not .IsSystemUseColumn }}
+        {{ .CodeType }} ${{ .Name.Default.Camel }},
+{{- end}}
+{{- end}}
+{{- else }}
 {{- range .RelatedResponse.Schema.Properties}}
         {{ if eq .CodeType "object" }}?{{ end }}{{ .CodeType }} ${{ .Name.Default.Camel }},
 {{- end}}
-    ) {
+{{- end}}
+) {
+
+{{- if ne .RelatedMainModel nil }}
+{{- range .RelatedMainModel.Columns }}
+{{- if not .IsSystemUseColumn }}
+        $this->{{ .Name.Default.Camel }} = ${{ .Name.Default.Camel }};
+{{- end}}
+{{- end}}
+{{- else }}
 {{- range .RelatedResponse.Schema.Properties}}
         $this->{{ .Name.Default.Camel }} = ${{ .Name.Default.Camel }};
+{{- end}}
 {{- end}}
     }
 
@@ -29,8 +54,17 @@ readonly class {{ .Name.Singular.Title }}
     ): ?static
     {
         return new static(
+
+{{- if ne .RelatedMainModel nil }}
+{{- range .RelatedMainModel.Columns }}
+{{- if not .IsSystemUseColumn }}
+            {{ .Name.Default.Camel }}: {{ if eq .CodeType "bool" }}(bool){{ end }}$model->{{ .Name.Default.Snake }}{{ if eq .CodeType "array" }} ?? []{{ end }},
+{{- end}}
+{{- end}}
+{{- else }}
 {{- range .RelatedResponse.Schema.Properties}}
             {{ .Name.Default.Camel }}: {{ if eq .CodeType "bool" }}(bool){{ end }}$model->{{ .Name.Default.Snake }}{{ if eq .CodeType "array" }} ?? []{{ end }},
+{{- end}}
 {{- end}}
         );
     }

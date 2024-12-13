@@ -11,7 +11,7 @@ abstract class TestCase extends BaseTestCase
 {
     protected string $loginAPIPath = '/api/auth/signin';
 
-    protected string $userID = '';
+    protected string $userId = '';
 
     protected array $userCredential = [
         'email' => 'test@example.com',
@@ -23,7 +23,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         $user = User::factory()->create($this->userCredential);
         $this->loginCredential = $this->userCredential;
-        $this->userID = $user->id;
+        $this->userId = $user->id;
     }
 
     protected function getAuthToken(?array $credential = null): string

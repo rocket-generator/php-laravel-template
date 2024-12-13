@@ -49,7 +49,7 @@ class BaseRepository implements BaseRepositoryInterface
         return $query->get();
     }
 
-    public function allByFilterQuery($filter, $order = 'id', $direction = 'asc'): Builder
+    public function allByFilterQuery($filter, $order = 'id', $direction = 'asc'): Base|Builder|EloquentBuilder
     {
         $query = $this->buildQueryByFilter($this->getBaseQuery(), $filter);
 

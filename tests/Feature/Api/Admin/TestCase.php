@@ -11,7 +11,7 @@ abstract class TestCase extends BaseTestCase
 {
     protected string $loginAPIPath = '/api/auth/signin';
 
-    protected string $userID = '';
+    protected string $userId = '';
 
     protected array $adminCredential = [
         'email' => 'admin@example.com',

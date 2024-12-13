@@ -63,6 +63,9 @@ class {{ .Name.Singular.Title }}Service extends BaseService implements {{ .Name.
     public function find{{ .Name.Singular.Title }}ById(string $id): ?{{ .Name.Singular.Title }}
     {
         $model = $this->{{ .Name.Singular.Camel }}Repository->find($id);
+        if (empty($model)) {
+            return null;
+        }
         return {{ .Name.Singular.Title }}::createFromModel($model);
     }
 
